@@ -1,0 +1,20 @@
+plugins {
+    id 'java'
+}
+
+group 'xyz.reisminer'
+version '1'
+
+repositories {
+    mavenCentral()
+    maven {
+        name 'm2-dv8tion'
+        url 'https://m2.dv8tion.net/releases'
+    }
+}
+
+dependencies {
+    implementation 'org.seleniumhq.selenium:selenium-java:3.141.59'
+    implementation("net.dv8tion:JDA:4.3.0_334")
+    implementation 'org.apache.commons:commons-lang3:3.12.0'
+}

@@ -6,7 +6,7 @@
 *.log
 
 # Token File
-Secrets.java
+Base.Secrets.java
 
 # BlueJ files
 *.ctxt

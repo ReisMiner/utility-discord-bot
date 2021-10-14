@@ -35,6 +35,12 @@ public class Bot extends ListenerAdapter {
 
     @Override
     public void onSlashCommand(@NotNull SlashCommandEvent event) {
-        slashCommandManager.runCommand(event);
+        new Thread(){
+            @Override
+            public void run() {
+                slashCommandManager.runCommand(event);
+            }
+        }.start();
+
     }
 }

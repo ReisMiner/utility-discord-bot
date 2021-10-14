@@ -3,6 +3,9 @@ package Commands;
 import Base.Secrets;
 import Base.SlashCommand;
 import Base.SlashCommandArgs;
+import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.interactions.commands.Command;
 import net.dv8tion.jda.api.interactions.commands.OptionMapping;
@@ -10,14 +13,19 @@ import net.dv8tion.jda.api.interactions.commands.OptionType;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.awt.*;
 import java.util.ArrayList;
 
 import static org.openqa.selenium.support.ui.ExpectedConditions.presenceOfElementLocated;
 
 public class CreateCodeClashCommand extends SlashCommand {
+
+    public static boolean codeClashStarted = false;
+    public static String codeClashURL = "";
 
     @Override
     public String getDescription() {
@@ -40,63 +48,100 @@ public class CreateCodeClashCommand extends SlashCommand {
 
     @Override
     public void onExecute(SlashCommandEvent event) {
-        String reply = "Creating Code Clash...";
-        event.reply(reply).queue();
-        if (event.getOptions().size() != 3) {
-            event.getHook().sendMessage("Please Set either True or false for each mode!").queue();
-            return;
-        }
-        System.setProperty("webdriver.gecko.driver", Secrets.DRIVER_LOCATION);
-        WebDriver driver = new FirefoxDriver();
-        WebDriverWait wait = new WebDriverWait(driver, 30);
-        try {
-            //go to site and open login popup
-            driver.get("https://www.codingame.com/multiplayer/clashofcode");
-            wait.until(presenceOfElementLocated((By.cssSelector("button[translate='cgCookiesBanner.accept']")))).click();
-            wait.until(presenceOfElementLocated(By.cssSelector("a[translate='content-details-clashofcode.privateclash.externalLink']"))).click();
+        if (!codeClashStarted) {
+            codeClashStarted = true;
+            EmbedBuilder eb = new EmbedBuilder();
+            eb.setColor(Color.decode("#fcba03"));
+            eb.setTitle("Code Clash");
+            eb.setDescription("Creating Code Clash <a:Loading:865347649829208064>");
+            event.replyEmbeds(eb.build()).queue();
 
-            //login
-            wait.until(presenceOfElementLocated(By.cssSelector("button[data-test='go-to-login']"))).click();
-            wait.until(presenceOfElementLocated(By.cssSelector("input[data-test='login-email']"))).sendKeys(Secrets.CODE_CLASH_EMAIL);
-            wait.until(presenceOfElementLocated(By.cssSelector("input[data-test='login-password']"))).sendKeys(Secrets.CODE_CLASH_PW);
-            wait.until(presenceOfElementLocated(By.cssSelector("button[type='submit']"))).click();
-
-            //open popup to start CC
-            Thread.sleep(1000);
-            wait.until(presenceOfElementLocated(By.cssSelector("a[translate='content-details-clashofcode.privateclash.externalLink']"))).click();
-
-            //set checkboxes
-            WebElement reverseCbx = wait.until(presenceOfElementLocated(By.cssSelector("cg-checkbox[checkbox-id='reverse']")));
-            WebElement shortestCbx = wait.until(presenceOfElementLocated(By.cssSelector("cg-checkbox[checkbox-id='shortest']")));
-            WebElement fastestCbx = wait.until(presenceOfElementLocated(By.cssSelector("cg-checkbox[checkbox-id='fastest']")));
-
-            if (event.getOption("shortest-mode") != null)
-                if (!shortestCbx.getAttribute("checked").equalsIgnoreCase(event.getOption("shortest-mode").getAsString())) {
-                    shortestCbx.click();
-                }
-            if (event.getOption("reverse-mode") != null)
-                if (!reverseCbx.getAttribute("checked").equalsIgnoreCase(event.getOption("reverse-mode").getAsString())) {
-                    reverseCbx.click();
-                }
-            if (event.getOption("fastest-mode") != null)
-                if (!fastestCbx.getAttribute("checked").equalsIgnoreCase(event.getOption("fastest-mode").getAsString())) {
-                    fastestCbx.click();
-                }
-
-            //join and leave when first guy joins
-            wait.until(presenceOfElementLocated(By.cssSelector("a[translate='clashPrivatePopup.externalLink']"))).click();
-            Thread.sleep(3000);
-            reply = driver.getCurrentUrl();
-            event.getHook().editOriginal(reply).queue();
-            while(driver.findElements(By.xpath("/html/body/div[7]/div[2]/div[1]/div/div/ui-view/clash-lobby/div/div[1]/div[1]/div[1]/span/span[1]")).size() > 0){
-                Thread.sleep(1000);
+            if (event.getOptions().size() != 3) {
+                event.getHook().sendMessage("Please Set either True or false for each mode!").queue();
+                return;
             }
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } finally {
-            driver.quit();
+            System.setProperty("webdriver.chrome.driver", Secrets.CHROME_DRIVER_LOCATION);
+            ChromeOptions options = new ChromeOptions();
+            //options.addArguments("--headless");
+            WebDriver driver = new ChromeDriver(options);
+            WebDriverWait wait = new WebDriverWait(driver, 30);
+            try {
+                //go to site and open login popup
+                driver.get("https://www.codingame.com/multiplayer/clashofcode");
+                wait.until(presenceOfElementLocated((By.cssSelector("button[translate='cgCookiesBanner.accept']")))).click();
+                wait.until(presenceOfElementLocated(By.cssSelector("a[translate='content-details-clashofcode.privateclash.externalLink']"))).click();
+
+                //login
+                wait.until(presenceOfElementLocated(By.cssSelector("button[data-test='go-to-login']"))).click();
+                wait.until(presenceOfElementLocated(By.cssSelector("input[data-test='login-email']"))).sendKeys(Secrets.CODE_CLASH_EMAIL);
+                wait.until(presenceOfElementLocated(By.cssSelector("input[data-test='login-password']"))).sendKeys(Secrets.CODE_CLASH_PW);
+                wait.until(presenceOfElementLocated(By.cssSelector("button[type='submit']"))).click();
+
+                //open popup to start CC
+                Thread.sleep(2000);
+                wait.until(presenceOfElementLocated(By.cssSelector("a[translate='content-details-clashofcode.privateclash.externalLink']"))).click();
+
+                //set checkboxes
+                WebElement reverseCbx = wait.until(presenceOfElementLocated(By.cssSelector("cg-checkbox[checkbox-id='reverse']")));
+                WebElement shortestCbx = wait.until(presenceOfElementLocated(By.cssSelector("cg-checkbox[checkbox-id='shortest']")));
+                WebElement fastestCbx = wait.until(presenceOfElementLocated(By.cssSelector("cg-checkbox[checkbox-id='fastest']")));
+
+                if (event.getOption("shortest-mode") != null)
+                    if (!shortestCbx.getAttribute("checked").equalsIgnoreCase(event.getOption("shortest-mode").getAsString())) {
+                        shortestCbx.click();
+                    }
+                if (event.getOption("reverse-mode") != null)
+                    if (!reverseCbx.getAttribute("checked").equalsIgnoreCase(event.getOption("reverse-mode").getAsString())) {
+                        reverseCbx.click();
+                    }
+                if (event.getOption("fastest-mode") != null)
+                    if (!fastestCbx.getAttribute("checked").equalsIgnoreCase(event.getOption("fastest-mode").getAsString())) {
+                        fastestCbx.click();
+                    }
+
+                //join and leave when first guy joins
+                wait.until(presenceOfElementLocated(By.cssSelector("a[translate='clashPrivatePopup.externalLink']"))).click();
+                Thread.sleep(3000);
+                codeClashURL = driver.getCurrentUrl();
+                eb.setTitle("Code Clash Ready to Join", codeClashURL);
+                eb.setDescription("<a:success:862960208388161626> I created a code clash. Join it via the link in the embed Title!");
+                eb.setFooter("First joiner has to start the Clash!");
+                event.getHook().editOriginalEmbeds(eb.build()).queue();
+                while (driver.findElements(By.xpath("/html/body/div[7]/div[2]/div[1]/div/div/ui-view/clash-lobby/div/div[1]/div[1]/div[1]/span/span[1]")).size() > 0) {
+                    Thread.sleep(1000);
+                    if (driver.findElement(By.xpath("/html/body/div[7]/div[2]/div[1]/div/div/ui-view/clash-lobby/div/div[1]/div[1]/div[1]/div[4]/span[2]")).getText().equals("00:05")) {
+                        driver.quit();
+                        eb.setTitle("Code Clash Expired");
+                        eb.setDescription("<a:alertsign:864083960886853683> Code Clash expired because no one joined. Create a new one!");
+                        eb.setFooter("");
+                        event.getHook().editOriginalEmbeds(eb.build()).queue();
+                        return;
+                    }
+
+                }
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } finally {
+                driver.quit();
+            }
+            eb.setTitle("Code Clash Ready to Join", codeClashURL);
+            eb.setDescription("I left the clash. First joiner has to start the Clash!\nJoin via the Link in the Embed title!");
+            eb.setFooter("First joiner has to start the Clash!");
+            event.getHook().editOriginalEmbeds(eb.build()).queue();
+            codeClashStarted = false;
+            codeClashURL = "";
+        } else {
+            EmbedBuilder eb = new EmbedBuilder();
+            if (!codeClashURL.equals("")) {
+                eb.setTitle("Someone Already Created a Code Clash", codeClashURL);
+                eb.setDescription("<a:success:862960208388161626> Join via the Link in the Embed title!");
+                eb.setFooter("First joiner has to start the Clash!");
+            }else{
+                eb.setTitle("Code clash is already being created");
+                eb.setDescription("I'm already creating a Clash <a:Loading:865347649829208064>\nLook in the Chat history or enter this command again in a few seconds!");
+                eb.setFooter("First joiner has to start the Clash!");
+            }
+            event.getHook().editOriginalEmbeds(eb.build()).queue();
         }
-        reply += "\nI left the game. The Person who first joined has to start it when y'all are ready!";
-        event.getHook().editOriginal(reply).queue();
     }
 }

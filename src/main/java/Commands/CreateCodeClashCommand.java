@@ -60,7 +60,7 @@ public class CreateCodeClashCommand extends SlashCommand {
                 System.setProperty("webdriver.chrome.driver", "C:\\Program Files\\Google\\Chrome\\Application\\chromedriver.exe");
             else {
                 options.setBinary("/app/.apt/usr/bin/google-chrome");
-                System.setProperty("webdriver.chrome.driver", System.getenv("CHROMEDRIVER_PATH"));
+                System.setProperty("webdriver.chrome.driver", System.getenv("/app/.chromedriver"));
             }
             options.addArguments("--headless");
             WebDriver driver = new ChromeDriver(options);

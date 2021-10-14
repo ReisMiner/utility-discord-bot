@@ -1,5 +1,5 @@
-import Base.Secrets;
-import Base.SlashCommandManager;
+package Base;
+
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Activity;

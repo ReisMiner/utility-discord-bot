@@ -4,11 +4,7 @@ import Base.Secrets;
 import Base.SlashCommand;
 import Base.SlashCommandArgs;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.entities.Message;
-import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
-import net.dv8tion.jda.api.interactions.commands.Command;
-import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -19,6 +15,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Locale;
 
 import static org.openqa.selenium.support.ui.ExpectedConditions.presenceOfElementLocated;
 
@@ -43,6 +40,7 @@ public class CreateCodeClashCommand extends SlashCommand {
         args.add(new SlashCommandArgs(OptionType.BOOLEAN, "shortest-mode", "Enable shortest Mode?", true));
         args.add(new SlashCommandArgs(OptionType.BOOLEAN, "fastest-mode", "Enable fastest Mode?", true));
         args.add(new SlashCommandArgs(OptionType.BOOLEAN, "reverse-mode", "Enable reverse Mode?", true));
+        args.add(new SlashCommandArgs(OptionType.BOOLEAN, "ping-code-clash-role", "Should it ping the Code Clash Role when the Battle is ready?", false));
         return args;
     }
 
@@ -60,9 +58,12 @@ public class CreateCodeClashCommand extends SlashCommand {
                 event.getHook().sendMessage("Please Set either True or false for each mode!").queue();
                 return;
             }
-            System.setProperty("webdriver.chrome.driver", Secrets.CHROME_DRIVER_LOCATION);
+            if (System.getProperty("os.name").toLowerCase(Locale.ROOT).contains("windows"))
+                System.setProperty("webdriver.chrome.driver", Secrets.CHROME_DRIVER_LOCATION);
+            else
+                System.setProperty("webdriver.chrome.driver", Secrets.CHROME_DRIVER_LOCATION_LINUX);
             ChromeOptions options = new ChromeOptions();
-            //options.addArguments("--headless");
+            options.addArguments("--headless");
             WebDriver driver = new ChromeDriver(options);
             WebDriverWait wait = new WebDriverWait(driver, 30);
             try {
@@ -102,6 +103,10 @@ public class CreateCodeClashCommand extends SlashCommand {
                 //join and leave when first guy joins
                 wait.until(presenceOfElementLocated(By.cssSelector("a[translate='clashPrivatePopup.externalLink']"))).click();
                 Thread.sleep(3000);
+
+                if(event.getOption("fastest-mode").getAsBoolean()){
+                    event.getTextChannel().sendMessage("<@&884056398323937341>").queue();
+                }
                 codeClashURL = driver.getCurrentUrl();
                 eb.setTitle("Code Clash Ready to Join", codeClashURL);
                 eb.setDescription("<a:success:862960208388161626> I created a code clash. Join it via the link in the embed Title!");
@@ -136,7 +141,7 @@ public class CreateCodeClashCommand extends SlashCommand {
                 eb.setTitle("Someone Already Created a Code Clash", codeClashURL);
                 eb.setDescription("<a:success:862960208388161626> Join via the Link in the Embed title!");
                 eb.setFooter("First joiner has to start the Clash!");
-            }else{
+            } else {
                 eb.setTitle("Code clash is already being created");
                 eb.setDescription("I'm already creating a Clash <a:Loading:865347649829208064>\nLook in the Chat history or enter this command again in a few seconds!");
                 eb.setFooter("First joiner has to start the Clash!");

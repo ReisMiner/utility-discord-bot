@@ -1,9 +1,21 @@
 plugins {
     id 'java'
+    id'com.github.johnrengelman.shadow' version '5.2.0'
 }
 
 group 'xyz.reisminer'
 version '1'
+
+jar {
+    manifest {
+        attributes(
+                'Main-Class': "Base.Bot"
+        )
+    }
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+}
 
 repositories {
     mavenCentral()

@@ -1,1 +1,1 @@
-web: java -jar build/libs/codeclasher-1-all.jar
+run: java -jar build/libs/codeclasher-1-all.jar

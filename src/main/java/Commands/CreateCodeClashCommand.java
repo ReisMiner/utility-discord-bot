@@ -1,6 +1,6 @@
 package Commands;
 
-import Base.Secrets;
+import Base.Bot;
 import Base.SlashCommand;
 import Base.SlashCommandArgs;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -46,7 +46,6 @@ public class CreateCodeClashCommand extends SlashCommand {
 
     @Override
     public void onExecute(SlashCommandEvent event) {
-        System.out.println("Command");
         if (!codeClashStarted) {
             codeClashStarted = true;
             EmbedBuilder eb = new EmbedBuilder();
@@ -56,9 +55,9 @@ public class CreateCodeClashCommand extends SlashCommand {
             event.replyEmbeds(eb.build()).queue();
 
             if (System.getProperty("os.name").toLowerCase(Locale.ROOT).contains("windows"))
-                System.setProperty("webdriver.chrome.driver", Secrets.CHROME_DRIVER_LOCATION);
+                System.setProperty("webdriver.chrome.driver", "C:\\Program Files\\Google\\Chrome\\Application\\chromedriver.exe");
             else
-                System.setProperty("webdriver.chrome.driver", Secrets.CHROME_DRIVER_LOCATION_LINUX);
+                System.setProperty("webdriver.chrome.driver", "/usr/bin/chromedriver");
             ChromeOptions options = new ChromeOptions();
             options.addArguments("--headless");
             WebDriver driver = new ChromeDriver(options);
@@ -71,8 +70,8 @@ public class CreateCodeClashCommand extends SlashCommand {
 
                 //login
                 wait.until(presenceOfElementLocated(By.cssSelector("button[data-test='go-to-login']"))).click();
-                wait.until(presenceOfElementLocated(By.cssSelector("input[data-test='login-email']"))).sendKeys(Secrets.CODE_CLASH_EMAIL);
-                wait.until(presenceOfElementLocated(By.cssSelector("input[data-test='login-password']"))).sendKeys(Secrets.CODE_CLASH_PW);
+                wait.until(presenceOfElementLocated(By.cssSelector("input[data-test='login-email']"))).sendKeys(Bot.CC_EMAIL);
+                wait.until(presenceOfElementLocated(By.cssSelector("input[data-test='login-password']"))).sendKeys(Bot.CC_PW);
                 wait.until(presenceOfElementLocated(By.cssSelector("button[type='submit']"))).click();
 
                 //open popup to start CC

@@ -47,6 +47,8 @@ public class CreateCodeClashCommand extends SlashCommand {
     @Override
     public void onExecute(SlashCommandEvent event) {
         if (!codeClashStarted) {
+            ChromeOptions options = new ChromeOptions();
+
             codeClashStarted = true;
             EmbedBuilder eb = new EmbedBuilder();
             eb.setColor(Color.decode("#fcba03"));
@@ -56,9 +58,10 @@ public class CreateCodeClashCommand extends SlashCommand {
 
             if (System.getProperty("os.name").toLowerCase(Locale.ROOT).contains("windows"))
                 System.setProperty("webdriver.chrome.driver", "C:\\Program Files\\Google\\Chrome\\Application\\chromedriver.exe");
-            else
-                System.setProperty("webdriver.chrome.driver", "/usr/bin/chromedriver");
-            ChromeOptions options = new ChromeOptions();
+            else {
+                options.setBinary("/app/.apt/usr/bin/google-chrome");
+                System.setProperty("webdriver.chrome.driver", System.getenv("CHROMEDRIVER_PATH"));
+            }
             options.addArguments("--headless");
             WebDriver driver = new ChromeDriver(options);
             WebDriverWait wait = new WebDriverWait(driver, 30);
@@ -100,13 +103,13 @@ public class CreateCodeClashCommand extends SlashCommand {
                 wait.until(presenceOfElementLocated(By.cssSelector("a[translate='clashPrivatePopup.externalLink']"))).click();
                 Thread.sleep(3000);
 
-                if(event.getOptions().size()>3 && event.getOption("ping-code-clash-role").getAsBoolean()){
+                if (event.getOptions().size() > 3 && event.getOption("ping-code-clash-role").getAsBoolean()) {
                     event.getTextChannel().sendMessage("<@&884056398323937341>").queue();
                 }
                 codeClashURL = driver.getCurrentUrl();
-                System.out.println("Created Code Clash: "+codeClashURL);
+                System.out.println("Created Code Clash: " + codeClashURL);
                 eb.setTitle("Code Clash Ready to Join", codeClashURL);
-                eb.setDescription("<a:success:862960208388161626> "+event.getMember().getAsMention()+" created a code clash. Join it via the link in the embed Title!");
+                eb.setDescription("<a:success:862960208388161626> " + event.getMember().getAsMention() + " created a code clash. Join it via the link in the embed Title!");
                 eb.setFooter("First joiner has to start the Clash!");
                 event.getHook().editOriginalEmbeds(eb.build()).queue();
                 while (driver.findElements(By.xpath("/html/body/div[7]/div[2]/div[1]/div/div/ui-view/clash-lobby/div/div[1]/div[1]/div[1]/span/span[1]")).size() > 0) {

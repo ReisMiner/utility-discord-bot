@@ -1,1 +1,1 @@
-run: java -jar build/libs/codeclasher-1-all.jar
+worker: java -jar build/libs/codeclasher-1-all.jar

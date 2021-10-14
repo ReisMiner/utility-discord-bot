@@ -46,6 +46,7 @@ public class CreateCodeClashCommand extends SlashCommand {
 
     @Override
     public void onExecute(SlashCommandEvent event) {
+        System.out.println("Command");
         if (!codeClashStarted) {
             codeClashStarted = true;
             EmbedBuilder eb = new EmbedBuilder();
@@ -54,10 +55,6 @@ public class CreateCodeClashCommand extends SlashCommand {
             eb.setDescription("Creating Code Clash <a:Loading:865347649829208064>");
             event.replyEmbeds(eb.build()).queue();
 
-            if (event.getOptions().size() != 3) {
-                event.getHook().sendMessage("Please Set either True or false for each mode!").queue();
-                return;
-            }
             if (System.getProperty("os.name").toLowerCase(Locale.ROOT).contains("windows"))
                 System.setProperty("webdriver.chrome.driver", Secrets.CHROME_DRIVER_LOCATION);
             else
@@ -104,12 +101,13 @@ public class CreateCodeClashCommand extends SlashCommand {
                 wait.until(presenceOfElementLocated(By.cssSelector("a[translate='clashPrivatePopup.externalLink']"))).click();
                 Thread.sleep(3000);
 
-                if(event.getOption("fastest-mode").getAsBoolean()){
+                if(event.getOptions().size()>3 && event.getOption("ping-code-clash-role").getAsBoolean()){
                     event.getTextChannel().sendMessage("<@&884056398323937341>").queue();
                 }
                 codeClashURL = driver.getCurrentUrl();
+                System.out.println("Created Code Clash: "+codeClashURL);
                 eb.setTitle("Code Clash Ready to Join", codeClashURL);
-                eb.setDescription("<a:success:862960208388161626> I created a code clash. Join it via the link in the embed Title!");
+                eb.setDescription("<a:success:862960208388161626> "+event.getMember().getAsMention()+" created a code clash. Join it via the link in the embed Title!");
                 eb.setFooter("First joiner has to start the Clash!");
                 event.getHook().editOriginalEmbeds(eb.build()).queue();
                 while (driver.findElements(By.xpath("/html/body/div[7]/div[2]/div[1]/div/div/ui-view/clash-lobby/div/div[1]/div[1]/div[1]/span/span[1]")).size() > 0) {
@@ -140,13 +138,12 @@ public class CreateCodeClashCommand extends SlashCommand {
             if (!codeClashURL.equals("")) {
                 eb.setTitle("Someone Already Created a Code Clash", codeClashURL);
                 eb.setDescription("<a:success:862960208388161626> Join via the Link in the Embed title!");
-                eb.setFooter("First joiner has to start the Clash!");
             } else {
                 eb.setTitle("Code clash is already being created");
                 eb.setDescription("I'm already creating a Clash <a:Loading:865347649829208064>\nLook in the Chat history or enter this command again in a few seconds!");
-                eb.setFooter("First joiner has to start the Clash!");
             }
-            event.getHook().editOriginalEmbeds(eb.build()).queue();
+            eb.setFooter("First joiner has to start the Clash!");
+            event.replyEmbeds(eb.build()).queue();
         }
     }
 }

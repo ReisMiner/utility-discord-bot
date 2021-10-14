@@ -1,7 +1,9 @@
 package Base;
 
 import Commands.CreateCodeClashCommand;
+import Commands.InviteCommand;
 import Commands.PingCommand;
+import Commands.SourceCommand;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
@@ -21,6 +23,8 @@ public class SlashCommandManager {
         slashCommands = new ArrayList<>();
         slashCommands.add(new PingCommand());
         slashCommands.add(new CreateCodeClashCommand());
+        slashCommands.add(new InviteCommand());
+        slashCommands.add(new SourceCommand());
 
         registerSlashCommands(jda, guildID);
     }

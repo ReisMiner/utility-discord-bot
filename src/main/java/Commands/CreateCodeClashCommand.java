@@ -156,6 +156,8 @@ public class CreateCodeClashCommand extends SlashCommand {
 
                 }
             } catch (Exception e) {
+                codeClashStarted = false;
+                codeClashURL = "";
                 e.printStackTrace();
                 eb.setColor(Color.decode("#a83246"));
                 eb.setTitle("Code Clash Error");
@@ -165,8 +167,6 @@ public class CreateCodeClashCommand extends SlashCommand {
                 event.getHook().editOriginalEmbeds(eb.build()).queue();
                 return;
             } finally {
-                codeClashStarted = false;
-                codeClashURL = "";
                 driver.quit();
             }
             eb.setTitle("Code Clash Ready to Join", codeClashURL);

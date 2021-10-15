@@ -78,7 +78,7 @@ public class CreateCodeClashCommand extends SlashCommand {
                 wait.until(presenceOfElementLocated(By.cssSelector("button[type='submit']"))).click();
 
                 //open popup to start CC
-                Thread.sleep(2000);
+                Thread.sleep(3000);
                 wait.until(presenceOfElementLocated(By.cssSelector("a[translate='content-details-clashofcode.privateclash.externalLink']"))).click();
 
                 //set checkboxes

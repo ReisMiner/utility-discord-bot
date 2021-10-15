@@ -63,8 +63,9 @@ public class CreateCodeClashCommand extends SlashCommand {
                 System.setProperty("webdriver.chrome.driver", "/app/.chromedriver/bin/chromedriver");
             }
             options.addArguments("--headless");
+            options.addArguments("--incognito");
             WebDriver driver = new ChromeDriver(options);
-            WebDriverWait wait = new WebDriverWait(driver, 30);
+            WebDriverWait wait = new WebDriverWait(driver, 7);
             try {
                 //go to site and open login popup
                 driver.get("https://www.codingame.com/multiplayer/clashofcode");
@@ -78,7 +79,7 @@ public class CreateCodeClashCommand extends SlashCommand {
                 wait.until(presenceOfElementLocated(By.cssSelector("button[type='submit']"))).click();
 
                 //open popup to start CC
-                Thread.sleep(3000);
+                Thread.sleep(5000);
                 wait.until(presenceOfElementLocated(By.cssSelector("a[translate='content-details-clashofcode.privateclash.externalLink']"))).click();
 
                 //set checkboxes
@@ -86,18 +87,46 @@ public class CreateCodeClashCommand extends SlashCommand {
                 WebElement shortestCbx = wait.until(presenceOfElementLocated(By.cssSelector("cg-checkbox[checkbox-id='shortest']")));
                 WebElement fastestCbx = wait.until(presenceOfElementLocated(By.cssSelector("cg-checkbox[checkbox-id='fastest']")));
 
-                if (event.getOption("shortest-mode") != null)
-                    if (!shortestCbx.getAttribute("checked").equalsIgnoreCase(event.getOption("shortest-mode").getAsString())) {
-                        shortestCbx.click();
+                System.out.println(fastestCbx);
+                System.out.println(shortestCbx.getAttribute("checked"));
+                System.out.println(reverseCbx);
+                System.out.println(event.getOption("shortest-mode").getAsString());
+                System.out.println(event.getOption("fastest-mode").getAsString());
+                System.out.println(event.getOption("reverse-mode").getAsString());
+
+                if (event.getOption("shortest-mode") != null) {
+                    if (shortestCbx.getAttribute("checked") != null) {
+                        if (!shortestCbx.getAttribute("checked").equalsIgnoreCase(event.getOption("shortest-mode").getAsString())) {
+                            shortestCbx.click();
+                        }
+                    } else {
+                        if (event.getOption("shortest-mode").getAsBoolean()) {
+                            shortestCbx.click();
+                        }
                     }
-                if (event.getOption("reverse-mode") != null)
-                    if (!reverseCbx.getAttribute("checked").equalsIgnoreCase(event.getOption("reverse-mode").getAsString())) {
-                        reverseCbx.click();
+                }
+                if (event.getOption("reverse-mode") != null) {
+                    if (reverseCbx.getAttribute("checked") != null) {
+                        if (!reverseCbx.getAttribute("checked").equalsIgnoreCase(event.getOption("reverse-mode").getAsString())) {
+                            reverseCbx.click();
+                        }
+                    } else {
+                        if (event.getOption("reverse-mode").getAsBoolean()) {
+                            reverseCbx.click();
+                        }
                     }
-                if (event.getOption("fastest-mode") != null)
-                    if (!fastestCbx.getAttribute("checked").equalsIgnoreCase(event.getOption("fastest-mode").getAsString())) {
-                        fastestCbx.click();
+                }
+                if (event.getOption("fastest-mode") != null) {
+                    if (fastestCbx.getAttribute("checked") != null) {
+                        if (!fastestCbx.getAttribute("checked").equalsIgnoreCase(event.getOption("fastest-mode").getAsString())) {
+                            fastestCbx.click();
+                        }
+                    } else {
+                        if (event.getOption("fastest-mode").getAsBoolean()) {
+                            fastestCbx.click();
+                        }
                     }
+                }
 
                 //join and leave when first guy joins
                 wait.until(presenceOfElementLocated(By.cssSelector("a[translate='clashPrivatePopup.externalLink']"))).click();
@@ -126,9 +155,18 @@ public class CreateCodeClashCommand extends SlashCommand {
                     }
 
                 }
-            } catch (InterruptedException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
+                eb.setColor(Color.decode("#a83246"));
+                eb.setTitle("Code Clash Error");
+                eb.setFooter("");
+                eb.setDescription("<a:alertsign:864083960886853683> Could not create a code Clash.\n" +
+                        "\nIf you want you can report this occurrence to <@215136536260378624>!");
+                event.getHook().editOriginalEmbeds(eb.build()).queue();
+                return;
             } finally {
+                codeClashStarted = false;
+                codeClashURL = "";
                 driver.quit();
             }
             eb.setTitle("Code Clash Ready to Join", codeClashURL);

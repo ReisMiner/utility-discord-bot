@@ -23,6 +23,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.Set;
 
 public class Bot extends ListenerAdapter {
 
@@ -50,12 +51,11 @@ public class Bot extends ListenerAdapter {
 
     @Override
     public void onSlashCommand(@NotNull SlashCommandEvent event) {
-        new Thread(){
-            @Override
-            public void run() {
-                slashCommandManager.runCommand(event);
-            }
-        }.start();
+        new Thread(() -> {
+            slashCommandManager.runCommand(event);
+            Set<Thread> threadset = Thread.getAllStackTraces().keySet();
+            System.out.println(threadset.size());
+        }).start();
     }
 
     private static void registerSecrets(){

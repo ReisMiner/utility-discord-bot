@@ -120,6 +120,8 @@ public class CreateCodeClashCommand extends SlashCommand {
                         eb.setDescription("<a:alertsign:864083960886853683> Code Clash expired because no one joined. Create a new one!");
                         eb.setFooter("");
                         event.getHook().editOriginalEmbeds(eb.build()).queue();
+                        codeClashStarted = false;
+                        codeClashURL = "";
                         return;
                     }
 

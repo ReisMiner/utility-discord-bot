@@ -187,5 +187,7 @@ public class CreateCodeClashCommand extends SlashCommand {
             eb.setFooter("First joiner has to start the Clash!");
             event.replyEmbeds(eb.build()).queue();
         }
+
+        System.gc();
     }
 }

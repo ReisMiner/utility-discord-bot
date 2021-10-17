@@ -53,8 +53,6 @@ public class Bot extends ListenerAdapter {
     public void onSlashCommand(@NotNull SlashCommandEvent event) {
         new Thread(() -> {
             slashCommandManager.runCommand(event);
-            Set<Thread> threadset = Thread.getAllStackTraces().keySet();
-            System.out.println(threadset.size());
         }).start();
     }
 
@@ -80,5 +78,6 @@ public class Bot extends ListenerAdapter {
                 }
             }
         }
+        System.gc();
     }
 }

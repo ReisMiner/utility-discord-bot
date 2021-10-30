@@ -63,7 +63,7 @@ public class CreateCodeClashCommand extends SlashCommand {
                 System.setProperty("webdriver.chrome.driver", "/app/.chromedriver/bin/chromedriver");
             }
             options.addArguments("--headless");
-            options.addArguments("--incognito");
+            //options.addArguments("--incognito");
             WebDriver driver = new ChromeDriver(options);
             WebDriverWait wait = new WebDriverWait(driver, 7);
             try {

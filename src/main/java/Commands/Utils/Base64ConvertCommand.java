@@ -54,6 +54,8 @@ public class Base64ConvertCommand extends SlashCommand {
                     out.setText(new String(java.util.Base64.getDecoder().decode(message.getBytes(StandardCharsets.UTF_8))));
                 } else {
                     out = BotUtils.textFromMsgLink(message, event);
+                    if (out.getEmbedded())
+                        out.setText(out.getText().replaceAll("`", "").replaceAll("\n", ""));
                     out.setText(new String(java.util.Base64.getDecoder().decode(out.getText().getBytes(StandardCharsets.UTF_8))));
                 }
             }

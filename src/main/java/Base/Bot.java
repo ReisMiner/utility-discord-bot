@@ -37,7 +37,7 @@ public class Bot extends ListenerAdapter {
 
     @Override
     public void onReady(@NotNull ReadyEvent event) {
-        jda.getPresence().setActivity(Activity.playing("/codeclash -> Create Code Clashes"));
+        jda.getPresence().setActivity(Activity.playing("/hex -> encode and decode hex!"));
         slashCommandManager = new SlashCommandManager(jda, null);
     }
 

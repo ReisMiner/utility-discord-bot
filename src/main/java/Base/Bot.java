@@ -8,22 +8,16 @@ import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.utils.ChunkingFilter;
-import net.dv8tion.jda.api.utils.MemberCachePolicy;
 import org.jetbrains.annotations.NotNull;
 import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
 import org.xml.sax.SAXException;
 
 import javax.security.auth.login.LoginException;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
-import java.util.Set;
 
 public class Bot extends ListenerAdapter {
 
@@ -44,7 +38,7 @@ public class Bot extends ListenerAdapter {
     @Override
     public void onReady(@NotNull ReadyEvent event) {
         jda.getPresence().setActivity(Activity.playing("/codeclash -> Create Code Clashes"));
-        slashCommandManager = new SlashCommandManager(jda, 684446613028077639L);
+        slashCommandManager = new SlashCommandManager(jda, null);
     }
 
     @Override

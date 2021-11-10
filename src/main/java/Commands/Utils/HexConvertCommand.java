@@ -72,6 +72,9 @@ public class HexConvertCommand extends SlashCommand {
             message = message.replaceAll("\\s+","");
             try {
                 String hex_text = new String(Hex.decodeHex(message), StandardCharsets.UTF_8);
+                if(hex_text.contains("`")){
+                    hex_text = hex_text.replaceAll("`", "`\u200B");
+                }
                 output += String.format("\nText: ```\n%s\n```", hex_text);
             } catch (DecoderException ignore) {
             }

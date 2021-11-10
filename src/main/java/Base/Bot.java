@@ -38,21 +38,20 @@ public class Bot extends ListenerAdapter {
         jda = JDABuilder.create(Bot.TOKEN, GatewayIntent.GUILD_MESSAGES, GatewayIntent.DIRECT_MESSAGES, GatewayIntent.GUILD_VOICE_STATES)
                 .addEventListeners(new Bot())
                 .setChunkingFilter(ChunkingFilter.ALL) // enable member chunking for all guilds
-                .setMemberCachePolicy(MemberCachePolicy.ALL)
-                .enableIntents(GatewayIntent.GUILD_MEMBERS)
                 .build();
     }
 
     @Override
     public void onReady(@NotNull ReadyEvent event) {
         jda.getPresence().setActivity(Activity.playing("/codeclash -> Create Code Clashes"));
-        slashCommandManager = new SlashCommandManager(jda, null);
+        slashCommandManager = new SlashCommandManager(jda, 684446613028077639L);
     }
 
     @Override
     public void onSlashCommand(@NotNull SlashCommandEvent event) {
         new Thread(() -> {
             slashCommandManager.runCommand(event);
+            System.gc();
         }).start();
     }
 

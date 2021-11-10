@@ -52,7 +52,7 @@ public class CreateCodeClashCommand extends SlashCommand {
             codeClashStarted = true;
             EmbedBuilder eb = new EmbedBuilder();
             eb.setColor(Color.decode("#fcba03"));
-            eb.setTitle("Code Clash");
+            eb.setTitle("LIKELY TO NOT WORK!! CAPTCHA PREVENTS IT!");
             eb.setDescription("Creating Code Clash <a:Loading:865347649829208064>");
             event.replyEmbeds(eb.build()).queue();
 
@@ -65,7 +65,7 @@ public class CreateCodeClashCommand extends SlashCommand {
             options.addArguments("--headless");
             options.addArguments("--incognito");
             WebDriver driver = new ChromeDriver(options);
-            WebDriverWait wait = new WebDriverWait(driver, 7);
+            WebDriverWait wait = new WebDriverWait(driver, 10);
             try {
                 //go to site and open login popup
                 driver.get("https://www.codingame.com/multiplayer/clashofcode");
@@ -187,7 +187,5 @@ public class CreateCodeClashCommand extends SlashCommand {
             eb.setFooter("First joiner has to start the Clash!");
             event.replyEmbeds(eb.build()).queue();
         }
-
-        System.gc();
     }
 }

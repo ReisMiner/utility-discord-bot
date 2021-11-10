@@ -4,6 +4,8 @@ import Commands.CreateCodeClashCommand;
 import Commands.InviteCommand;
 import Commands.PingCommand;
 import Commands.SourceCommand;
+import Commands.Utils.Base64ConvertCommand;
+import Commands.Utils.HexConvertCommand;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
@@ -18,13 +20,15 @@ public class SlashCommandManager {
         return slashCommands;
     }
 
-    //commands for specific servers only
+
     public SlashCommandManager(JDA jda, Long guildID) {
         slashCommands = new ArrayList<>();
         slashCommands.add(new PingCommand());
         slashCommands.add(new CreateCodeClashCommand());
         slashCommands.add(new InviteCommand());
         slashCommands.add(new SourceCommand());
+        slashCommands.add(new Base64ConvertCommand());
+        slashCommands.add(new HexConvertCommand());
 
         registerSlashCommands(jda, guildID);
     }

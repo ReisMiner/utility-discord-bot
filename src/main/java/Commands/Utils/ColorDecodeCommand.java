@@ -45,23 +45,19 @@ public class ColorDecodeCommand extends SlashCommand {
         try {
 
             if (!event.getOption("mode").getAsBoolean()) {
-                //HEX DECODE
+                //RGB DECODE
                 message = message.replaceAll("\\s+", "");
                 String[] split = message.split(",");
-                String hex = "#" + Integer.toHexString(Integer.parseInt(split[0])).toUpperCase(Locale.ROOT) +
-                        Integer.toHexString(Integer.parseInt(split[1])).toUpperCase(Locale.ROOT) +
-                        Integer.toHexString(Integer.parseInt(split[2])).toUpperCase(Locale.ROOT);
-
-                out = "Hex: ```\n" + hex + "\n```\nRGB: ```\n" + split[0] + ", " + split[1] + ", " + split[2] + "\n```";
-                message = hex.substring(1);
-
+                String hex = String.format("%02X%02X%02X", Integer.parseInt(split[0]), Integer.parseInt(split[1]), Integer.parseInt(split[2]));
+                out = "Hex: ```\n#" + hex + "\n```\nRGB: ```\n" + split[0] + ", " + split[1] + ", " + split[2] + "\n```";
+                message=hex;
             } else {
                 message = message.replaceAll("#", "");
                 int r = Integer.valueOf(message.substring(0, 2), 16);
                 int g = Integer.valueOf(message.substring(2, 4), 16);
                 int b = Integer.valueOf(message.substring(4, 6), 16);
 
-                out = "Hex: ```\n#" + message + "\n```\nRGB: ```\n" + r + ", " + g + ", " + b + "\n```";
+                out = "Hex: ```\n#" + message.toUpperCase(Locale.ROOT) + "\n```\nRGB: ```\n" + r + ", " + g + ", " + b + "\n```";
 
             }
 

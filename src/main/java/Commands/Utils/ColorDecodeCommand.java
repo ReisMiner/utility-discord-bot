@@ -40,6 +40,7 @@ public class ColorDecodeCommand extends SlashCommand {
         EmbedBuilder eb = new EmbedBuilder();
         String message = event.getOption("message").getAsString();
         String out;
+        boolean error = false;
 
         try {
 
@@ -52,6 +53,7 @@ public class ColorDecodeCommand extends SlashCommand {
                         Integer.toHexString(Integer.parseInt(split[2])).toUpperCase(Locale.ROOT);
 
                 out = "Hex: ```\n" + hex + "\n```\nRGB: ```\n" + split[0] + ", " + split[1] + ", " + split[2] + "\n```";
+                message = hex.substring(1);
 
             } else {
                 message = message.replaceAll("#", "");
@@ -64,28 +66,36 @@ public class ColorDecodeCommand extends SlashCommand {
             }
 
             eb.setDescription(out);
-            eb.setColor(Color.decode("#" + message));
-            createIMG(eb, message);
+            Color col = Color.decode("#" + message);
+            eb.setColor(col);
+            createIMG(eb, col);
+
         } catch (Exception e) {
             out = "<a:alertsign:864083960886853683> Couldn't Decode the given Color!\nMake sure to select the right mode and enter in the right format.\nHex example: #FFFFFF, RGB Example: 255,255,255";
             eb.setDescription(out);
             eb.setColor(Color.decode("#c0392b"));
-            System.out.println(e);
+            error = true;
+            e.printStackTrace();
         }
 
 
-        eb.setTitle(event.getOption("mode").getAsBoolean() ? "Decoded RGB Code" : "Decoded HEX Code");
+        eb.setTitle(event.getOption("mode").getAsBoolean() ? "Decoded HEX Code" : "Decoded RGB Code");
         eb.setFooter("Query performed by " + event.getMember().getUser().getAsTag());
-        event.getHook().editOriginalEmbeds(eb.build()).addFile(new File("output.jpg"), "output.jpg").queue();
+
+        if (!error)
+            event.getHook().editOriginalEmbeds(eb.build()).addFile(new File("output.jpg"), "output.jpg").queue();
+        else
+            event.getHook().editOriginalEmbeds(eb.build()).queue();
+
     }
 
-    private void createIMG(EmbedBuilder eb, String color) throws IOException {
+    private void createIMG(EmbedBuilder eb, Color color) throws IOException {
 
 
         BufferedImage bi = new BufferedImage(50, 50, ColorSpace.TYPE_RGB);
         Graphics2D graphics = bi.createGraphics();
 
-        graphics.setColor(Color.decode("#" + color));
+        graphics.setColor(color);
         graphics.fillRect(0, 0, bi.getWidth(), bi.getHeight());
 
         File outFile = new File("output.jpg");

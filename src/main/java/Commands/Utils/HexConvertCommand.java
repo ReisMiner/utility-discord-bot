@@ -57,15 +57,17 @@ public class HexConvertCommand extends SlashCommand {
                 return;
             }
 
-            if (event.getOption("is-message-link") != null || event.getOption("is-message-link").getAsBoolean()) {
+            if (event.getOption("is-message-link") != null) {
+                if (event.getOption("is-message-link").getAsBoolean()) {
 
-                out = BotUtils.textFromMsgLink(message, event);
+                    out = BotUtils.textFromMsgLink(message, event);
 
-                if (out.getText().equals("error"))
-                    return;
+                    if (out.getText().equals("error"))
+                        return;
 
-                message = out.getText();
+                    message = out.getText();
 
+                }
             }
 
             try {
@@ -89,24 +91,26 @@ public class HexConvertCommand extends SlashCommand {
             if (doSplit) {
                 out.setText(out.getText().replaceAll("..", "$0 ").toUpperCase());
                 eb.setDescription("```\n" + out.getText() + "\n```");
-            }else{
+            } else {
                 eb.setDescription(out.getText());
             }
         } else {
             //===================
             //DECODE HEX
             //===================
-            if (event.getOption("is-message-link") != null && event.getOption("is-message-link").getAsBoolean()) {
+            if (event.getOption("is-message-link") != null) {
+                if (event.getOption("is-message-link").getAsBoolean()) {
 
-                out = BotUtils.textFromMsgLink(message, event);
+                    out = BotUtils.textFromMsgLink(message, event);
 
-                if (out.getText().equals("error"))
-                    return;
+                    if (out.getText().equals("error"))
+                        return;
 
-                if (out.getEmbedded())
-                    out.setText(out.getText().replaceAll("`", "").replaceAll("\n", ""));
+                    if (out.getEmbedded())
+                        out.setText(out.getText().replaceAll("`", "").replaceAll("\n", ""));
 
-                message = out.getText();
+                    message = out.getText();
+                }
             }
 
             message = message.replaceAll("\\s+", "");

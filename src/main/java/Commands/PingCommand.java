@@ -7,7 +7,7 @@ import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 public class PingCommand extends SlashCommand {
     @Override
     public String getDescription() {
-        return "Returns the ping to the Base.Bot.";
+        return "Returns the ping to the Bot.";
     }
 
     @Override

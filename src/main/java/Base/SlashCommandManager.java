@@ -5,6 +5,7 @@ import Commands.InviteCommand;
 import Commands.PingCommand;
 import Commands.SourceCommand;
 import Commands.Utils.Base64ConvertCommand;
+import Commands.Utils.ColorDecodeCommand;
 import Commands.Utils.HashCommand;
 import Commands.Utils.HexConvertCommand;
 import net.dv8tion.jda.api.JDA;
@@ -31,6 +32,7 @@ public class SlashCommandManager {
         slashCommands.add(new Base64ConvertCommand());
         slashCommands.add(new HexConvertCommand());
         slashCommands.add(new HashCommand());
+        slashCommands.add(new ColorDecodeCommand());
 
         registerSlashCommands(jda, guildID);
     }

@@ -26,7 +26,7 @@ public class CreateCodeClashCommand extends SlashCommand {
 
     @Override
     public String getDescription() {
-        return "Creates a Code Clash. Define the modes which can be played. Default is all modes.";
+        return "Creates a Code Clash.";
     }
 
     @Override

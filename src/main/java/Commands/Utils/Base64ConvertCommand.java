@@ -29,7 +29,7 @@ public class Base64ConvertCommand extends SlashCommand {
     public ArrayList<SlashCommandArgs> getCommandArgs() {
         ArrayList<SlashCommandArgs> args = new ArrayList<>();
         args.add(new SlashCommandArgs(OptionType.BOOLEAN, "mode", "Encode = true, Decode = false", true));
-        args.add(new SlashCommandArgs(OptionType.STRING, "message", "Your Message", true));
+        args.add(new SlashCommandArgs(OptionType.STRING, "message", "Your Message, can also be a link to a Discord Message", true));
         args.add(new SlashCommandArgs(OptionType.BOOLEAN, "is-message-link", "Is your just entered message a link to a message?", false));
         return args;
     }

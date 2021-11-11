@@ -9,7 +9,7 @@ import java.awt.*;
 public class SourceCommand extends SlashCommand {
     @Override
     public String getDescription() {
-        return "View the Source Code of the bot on Github!";
+        return "View the Source Code on Github!";
     }
 
     @Override

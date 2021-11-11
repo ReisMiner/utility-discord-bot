@@ -1,15 +1,19 @@
 package Base;
 
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.JDA;
+import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.exceptions.ErrorResponseException;
 
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class BotUtils {
 
     public static Long[] getIdsFromMsgLink(String link) {
-        //https://discord.com/channels/831635090407686165/831635090911789130/908071611763155077
         String[] x = link.split("/");
         return new Long[]{Long.valueOf(x[x.length - 3]), Long.valueOf(x[x.length - 2]), Long.valueOf(x[x.length - 1])};
     }
@@ -23,8 +27,7 @@ public class BotUtils {
             if (m.getEmbeds().size() == 0) {
                 out.setText(m.getContentRaw());
                 out.setEmbedded(false);
-            }
-            else
+            } else
                 try {
                     out.setText(m.getEmbeds().get(0).getDescription());
                     out.setEmbedded(true);
@@ -55,6 +58,23 @@ public class BotUtils {
         }
 
         return out;
+    }
+
+    public static void switchPresence(JDA jda) {
+        Timer timer = new Timer();
+        final int[] counter = {0};
+        ArrayList<SlashCommand> cmds = Bot.slashCommandManager.getSlashCommands();
+        timer.schedule(new TimerTask() {
+
+            @Override
+            public void run() {
+                jda.getPresence().setActivity(Activity.playing("/" + cmds.get(counter[0]).getCommand() + " -> " + cmds.get(counter[0]).getDescription()));
+                counter[0]++;
+                if (cmds.size() == counter[0]) {
+                    counter[0] = 0;
+                }
+            }
+        }, 0, 5000);
     }
 
 }

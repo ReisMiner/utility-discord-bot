@@ -2,7 +2,6 @@ package Base;
 
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
-import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.events.ReadyEvent;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
@@ -37,8 +36,12 @@ public class Bot extends ListenerAdapter {
 
     @Override
     public void onReady(@NotNull ReadyEvent event) {
-        jda.getPresence().setActivity(Activity.playing("/hex -> encode and decode hex!"));
-        slashCommandManager = new SlashCommandManager(jda, null);
+        slashCommandManager = new SlashCommandManager(jda,null);
+        BotUtils.switchPresence(jda);
+
+        //remove cmds
+        //jda.updateCommands().queue();
+        //jda.getGuildById(684446613028077639L).updateCommands().queue();
     }
 
     @Override

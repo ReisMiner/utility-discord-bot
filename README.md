@@ -10,6 +10,8 @@ Make a pull Request!
 
 # wanna contribute?
 
+**Use JDK 11!!**
+
 - Clone the repo with intellij
 - let it build the gradle stuff and maybe you gotta reload gradle
 - code

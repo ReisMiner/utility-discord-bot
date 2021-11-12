@@ -8,5 +8,14 @@ Does not need any permissions (yet)
 # found a bug?
 Make a pull Request!
 
+# wanna contribute?
+
+- Clone the repo with intellij
+- let it build the gradle stuff and maybe you gotta reload gradle
+- code
+- build it with the shadowjar task
+- test the code
+- submit a pull request
+
 ---
 made by [ReisMiner#1111](https://reisminer.xyz)

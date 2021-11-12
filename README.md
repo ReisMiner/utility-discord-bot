@@ -14,10 +14,13 @@ Make a pull Request!
 
 - Clone the repo with intellij
 - let it build the gradle stuff and maybe you gotta reload gradle
+- add a Secrets.xml file with 3 tags TOKEN, CC_EMAIL and CC_PW in the root dir of the project
 - code
+- go to Base.Bot and at onReady() where the slashCommandManager is replace null with ur guildID 
 - build it with the shadowjar task
 - test the code
-- submit a pull request
+- replace your guildID from step 5 with null
+- submit a pull request and dont publish ur secrets.xml
 
 ---
 made by [ReisMiner#1111](https://reisminer.xyz)

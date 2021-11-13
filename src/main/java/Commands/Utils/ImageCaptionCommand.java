@@ -65,7 +65,7 @@ public class ImageCaptionCommand extends SlashCommand {
 
         if (!error)
             try {
-                eb.setThumbnail("attachment://img."+filetype);
+                eb.setImage("attachment://img."+filetype);
                 event.getHook().editOriginalEmbeds(eb.build()).addFile(new File("img." + filetype), "img." + filetype).queue();
             } catch (Exception e) {
                 out = "<a:alertsign:864083960886853683> Couldn't Edit the Image!\nCheck If the filetype is valid (.png, .jpg, .jpeg)";

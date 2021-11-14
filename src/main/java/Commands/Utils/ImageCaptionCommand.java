@@ -11,6 +11,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.*;
 
@@ -79,7 +80,7 @@ public class ImageCaptionCommand extends SlashCommand {
             event.getHook().editOriginalEmbeds(eb.build()).queue();
     }
 
-    public void addCaption(String caption, String url, String filetype) throws IOException {
+    public void addCaption(String caption, String url, String filetype) throws IOException, URISyntaxException {
         BufferedImage image = ImageIO.read(new URL(url));
         BufferedImage finalImage = makeImage(image, caption);
         File output = new File("img." + filetype);
@@ -114,8 +115,8 @@ public class ImageCaptionCommand extends SlashCommand {
         return fileType;
     }
 
-    public BufferedImage makeImage(BufferedImage image, String caption) throws IOException {
-        BufferedImage whiteBG = ImageIO.read(new File("wb.jpg"));
+    public BufferedImage makeImage(BufferedImage image, String caption) throws IOException, URISyntaxException {
+        BufferedImage whiteBG = ImageIO.read(new File(Objects.requireNonNull(getClass().getClassLoader().getResource("wb.jpg")).toURI()));
         whiteBG = resizeImage(whiteBG, image.getWidth(), 100);
 
         Graphics2D gf = whiteBG.createGraphics();

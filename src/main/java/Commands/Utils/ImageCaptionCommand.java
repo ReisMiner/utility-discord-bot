@@ -118,7 +118,7 @@ public class ImageCaptionCommand extends SlashCommand {
     }
 
     public BufferedImage makeImage(BufferedImage image, String caption) throws IOException, URISyntaxException {
-        BufferedImage whiteBG = ImageIO.read(new File(getClass().getResource("/wb.jpg").toURI()));
+        BufferedImage whiteBG = ImageIO.read(getClass().getResourceAsStream("/wb.jpg"));
         whiteBG = resizeImage(whiteBG, image.getWidth(), 100);
 
         Graphics2D gf = whiteBG.createGraphics();

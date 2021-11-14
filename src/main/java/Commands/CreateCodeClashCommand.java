@@ -1,23 +1,13 @@
 package Commands;
 
-import Base.Bot;
 import Base.SlashCommand;
 import Base.SlashCommandArgs;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.chrome.ChromeOptions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.Locale;
-
-import static org.openqa.selenium.support.ui.ExpectedConditions.presenceOfElementLocated;
 
 public class CreateCodeClashCommand extends SlashCommand {
 
@@ -46,14 +36,17 @@ public class CreateCodeClashCommand extends SlashCommand {
 
     @Override
     public void onExecute(SlashCommandEvent event) {
+        //COMMAND DOES NOT WORK SO LETS JUST IGNORE EVERYTHING IN HERE AND IVE THE USER A MESSAGE!
+        EmbedBuilder eb = new EmbedBuilder();
+        eb.setColor(Color.decode("#fcba03"));
+        eb.setTitle("Code clashes do not work anymore.");
+        eb.setDescription("We're sorry but try out some of the other amazing commands!");
+        eb.setFooter("Query performed by " + event.getMember().getUser().getAsTag());
+        event.replyEmbeds(eb.build()).queue();
+        /*
         if (!codeClashStarted) {
             ChromeOptions options = new ChromeOptions();
-
             codeClashStarted = true;
-            EmbedBuilder eb = new EmbedBuilder();
-            eb.setColor(Color.decode("#fcba03"));
-            eb.setTitle("LIKELY TO NOT WORK!! CAPTCHA PREVENTS IT!");
-            eb.setDescription("Creating Code Clash <a:Loading:865347649829208064>");
             event.replyEmbeds(eb.build()).queue();
 
             if (System.getProperty("os.name").toLowerCase(Locale.ROOT).contains("windows"))
@@ -176,7 +169,6 @@ public class CreateCodeClashCommand extends SlashCommand {
             codeClashStarted = false;
             codeClashURL = "";
         } else {
-            EmbedBuilder eb = new EmbedBuilder();
             if (!codeClashURL.equals("")) {
                 eb.setTitle("Someone Already Created a Code Clash", codeClashURL);
                 eb.setDescription("<a:success:862960208388161626> Join via the Link in the Embed title!");
@@ -187,5 +179,6 @@ public class CreateCodeClashCommand extends SlashCommand {
             eb.setFooter("First joiner has to start the Clash!");
             event.replyEmbeds(eb.build()).queue();
         }
+        */
     }
 }

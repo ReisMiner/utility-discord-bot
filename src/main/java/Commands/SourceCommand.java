@@ -1,5 +1,6 @@
 package Commands;
 
+import Base.BotUtils;
 import Base.SlashCommand;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
@@ -22,7 +23,7 @@ public class SourceCommand extends SlashCommand {
         EmbedBuilder eb = new EmbedBuilder();
         eb.setTitle("Click here to view the source!", "https://github.com/ReisMiner/codeclasher-discord-bot");
         eb.setDescription("Make a pull request if you found some issues!");
-        eb.setFooter("Made by ReisMiner#1111 - https://reisminer.xyz");
+        eb.setFooter("Made by " + BotUtils.getContributor());
         eb.setColor(Color.decode("#7289da"));
         event.replyEmbeds(eb.build()).queue();
     }

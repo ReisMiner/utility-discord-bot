@@ -6,14 +6,16 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 
-import javax.imageio.*;
+import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Objects;
 
 public class ImageCaptionCommand extends SlashCommand {
     @Override
@@ -116,7 +118,7 @@ public class ImageCaptionCommand extends SlashCommand {
     }
 
     public BufferedImage makeImage(BufferedImage image, String caption) throws IOException, URISyntaxException {
-        BufferedImage whiteBG = ImageIO.read(new File(Objects.requireNonNull(getClass().getClassLoader().getResource("wb.jpg")).toURI()));
+        BufferedImage whiteBG = ImageIO.read(new File(getClass().getResource("/wb.jpg").toURI()));
         whiteBG = resizeImage(whiteBG, image.getWidth(), 100);
 
         Graphics2D gf = whiteBG.createGraphics();

@@ -23,7 +23,7 @@ public class TimeConversionCommand extends SlashCommand {
 
     @Override
     public String getCommand() {
-        return "time-convert";
+        return "time-info";
     }
 
     @Override
@@ -48,9 +48,14 @@ public class TimeConversionCommand extends SlashCommand {
 
             Element clock = document.select("#clock").get(0);
             Element timezone = document.select(".keypoints > ul:nth-child(1) > li:nth-child(1)").get(0);
+            Element sunset = document.select("#time_zone > ul:nth-child(7) > li:nth-child(2)").get(0);
+            Element sunrise = document.select("#time_zone > ul:nth-child(7) > li:nth-child(1)").get(0);
 
             eb.setTitle("Time in " + country);
-            eb.setDescription("\n**" + clock.text() + "**\nTimezone: " + timezone.text().replaceAll("\\P{InBasic_Latin}", " "));
+            eb.setDescription("\n**" + clock.text() + "**" +
+                    "\nTimezone: " + timezone.text().replaceAll("\\P{InBasic_Latin}", " ")+
+                    "\nSunrise: "+sunrise.text().substring(sunrise.text().length()-5)+
+                    "\nSunset: "+sunset.text().substring(sunset.text().length()-5));
 
 
         } catch (

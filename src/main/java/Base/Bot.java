@@ -36,12 +36,12 @@ public class Bot extends ListenerAdapter {
 
     @Override
     public void onReady(@NotNull ReadyEvent event) {
-        slashCommandManager = new SlashCommandManager(jda,null);
-        BotUtils.switchPresence(jda);
+        //slashCommandManager = new SlashCommandManager(jda,684446613028077639L);
+        //BotUtils.switchPresence(jda);
 
         //remove cmds
-        //jda.updateCommands().queue();
-        //jda.getGuildById(684446613028077639L).updateCommands().queue();
+        jda.updateCommands().queue();
+        jda.getGuildById(684446613028077639L).updateCommands().queue();
     }
 
     @Override

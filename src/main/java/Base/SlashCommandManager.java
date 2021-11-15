@@ -1,6 +1,5 @@
 package Base;
 
-import Commands.CreateCodeClashCommand;
 import Commands.InviteCommand;
 import Commands.PingCommand;
 import Commands.SourceCommand;
@@ -23,7 +22,6 @@ public class SlashCommandManager {
     public SlashCommandManager(JDA jda, Long guildID) {
         slashCommands = new ArrayList<>();
         slashCommands.add(new PingCommand());
-        slashCommands.add(new CreateCodeClashCommand());
         slashCommands.add(new InviteCommand());
         slashCommands.add(new SourceCommand());
         slashCommands.add(new Base64ConvertCommand());

@@ -47,17 +47,20 @@ public class ImageCaptionCommand extends SlashCommand {
 
         String text = Objects.requireNonNull(event.getOption("text")).getAsString();
         String url = Objects.requireNonNull(event.getOption("url")).getAsString();
-        String[] a = url.split("\\.");
+        String[] a;
         String[] validTypes = {"png", "jpg", "jpeg"};
-        String filetype = validateFileType(a[a.length - 1], validTypes);
+        String filetype = "";
 
         try {
+            a = url.split("\\.");
+            filetype = validateFileType(a[a.length - 1], validTypes);
+
             if (!Arrays.asList(validTypes).contains(filetype)) {
                 throw new Exception("Not Valid File Type!");
             }
             addCaption(text, url, filetype);
         } catch (Exception e) {
-            out = "<a:alertsign:864083960886853683> Couldn't Edit the Image!\nCheck If the filetype is valid (.png, .jpg, .jpeg)";
+            out = "<a:alertsign:864083960886853683> Couldn't Edit the Image!\nCheck If the filetype is valid (.png, .jpg, .jpeg)\nCheck if the url is correct.";
             eb.setDescription(out);
             eb.setColor(Color.decode("#c0392b"));
             error = true;

@@ -1,5 +1,8 @@
-package Base;
+package Base.Util;
 
+import Base.Bot;
+import Base.ReadEmbedded;
+import Base.SlashCommand;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.Activity;

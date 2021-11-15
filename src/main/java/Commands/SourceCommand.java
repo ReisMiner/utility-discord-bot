@@ -1,6 +1,6 @@
 package Commands;
 
-import Base.BotUtils;
+import Base.Util.BotUtils;
 import Base.SlashCommand;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;

@@ -1,6 +1,6 @@
 package Commands.Utils;
 
-import Base.BotUtils;
+import Base.Util.BotUtils;
 import Base.ReadEmbedded;
 import Base.SlashCommand;
 import Base.SlashCommandArgs;

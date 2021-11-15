@@ -4,11 +4,7 @@ import Commands.CreateCodeClashCommand;
 import Commands.InviteCommand;
 import Commands.PingCommand;
 import Commands.SourceCommand;
-import Commands.Utils.Base64ConvertCommand;
-import Commands.Utils.ColorDecodeCommand;
-import Commands.Utils.HashCommand;
-import Commands.Utils.HexConvertCommand;
-import Commands.Utils.ImageCaptionCommand;
+import Commands.Utils.*;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
@@ -35,6 +31,7 @@ public class SlashCommandManager {
         slashCommands.add(new HashCommand());
         slashCommands.add(new ColorDecodeCommand());
         slashCommands.add(new ImageCaptionCommand());
+        slashCommands.add(new TimeConversionCommand());
 
         registerSlashCommands(jda, guildID);
     }

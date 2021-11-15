@@ -8,6 +8,7 @@ import net.dv8tion.jda.api.exceptions.ErrorResponseException;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.ThreadLocalRandom;
@@ -78,13 +79,20 @@ public class BotUtils {
         }, 0, 5000);
     }
 
-    public static String getContributor(){
+    public static String getContributor() {
         ArrayList<String> contributors = new ArrayList<>();
         contributors.add("ReisMiner#1111 - https://reisminer.xyz");
         contributors.add("Yatharth#1564 - sussy baka");
         int randomNum = ThreadLocalRandom.current().nextInt(0, contributors.size());
         System.out.println(randomNum);
         return contributors.get(randomNum);
+    }
+
+    public static String getValByPartialVal(String[] array, String value) {
+        for (String s : array)
+            if (s.toLowerCase(Locale.ROOT).contains(value.toLowerCase(Locale.ROOT)))
+                return s;
+        return null;
     }
 
 }

@@ -22,5 +22,7 @@ Make a pull Request!
 - replace your guildID from step 5 with null
 - submit a pull request and dont publish ur secrets.xml
 
----
-made by [ReisMiner#1111](https://reisminer.xyz)
+# contributors
+
+- ReisMiner - Founder and Dev
+- Yathy77 - Dev

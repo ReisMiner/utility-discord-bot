@@ -29,34 +29,40 @@ public class TimeConversionCommand extends SlashCommand {
     @Override
     public ArrayList<SlashCommandArgs> getCommandArgs() {
         ArrayList<SlashCommandArgs> args = new ArrayList<>();
-        args.add(new SlashCommandArgs(OptionType.STRING, "country", "The country you wanna know which time it is. Timezones/Cities also work.", true));
+        args.add(new SlashCommandArgs(OptionType.STRING, "location", "The country you wanna know which time it is. Timezones/Cities also work.", true));
         return args;
     }
 
     @Override
     public void onExecute(SlashCommandEvent event) {
         event.deferReply().queue();
-        EmbedBuilder eb = new EmbedBuilder();
-        eb.setColor(Color.decode("#ffd166"));
-
-        String country = event.getOption("country").getAsString();
+        String country = event.getOption("location").getAsString();
         country = StringUtils.capitalize(country.toLowerCase(Locale.ROOT));
 
-        try {
+        EmbedBuilder eb = new EmbedBuilder();
+        eb.setColor(Color.decode("#ffd166"));
+        eb.setTitle("Time in " + country);
 
+        try {
             Document document = Jsoup.connect("https://time.is/" + country).get();
 
             Element clock = document.select("#clock").get(0);
             Element timezone = document.select(".keypoints > ul:nth-child(1) > li:nth-child(1)").get(0);
-            Element sunset = document.select("#time_zone > ul:nth-child(7) > li:nth-child(2)").get(0);
-            Element sunrise = document.select("#time_zone > ul:nth-child(7) > li:nth-child(1)").get(0);
 
-            eb.setTitle("Time in " + country);
-            eb.setDescription("\n**" + clock.text() + "**" +
-                    "\nTimezone: " + timezone.text().replaceAll("\\P{InBasic_Latin}", " ")+
-                    "\nSunrise: "+sunrise.text().substring(sunrise.text().length()-5)+
-                    "\nSunset: "+sunset.text().substring(sunset.text().length()-5));
+            Element sunset = null;
+            Element sunrise = null;
 
+            try {
+                sunset = document.select("#time_zone > ul:nth-child(7) > li:nth-child(2)").get(0);
+                sunrise = document.select("#time_zone > ul:nth-child(7) > li:nth-child(1)").get(0);
+                eb.setDescription("\n**" + clock.text() + "**" +
+                        "\nTimezone: " + timezone.text().replaceAll("\\P{InBasic_Latin}", " ")+
+                        "\nSunrise: "+sunrise.text().substring(sunrise.text().length()-5)+
+                        "\nSunset: "+sunset.text().substring(sunset.text().length()-5));
+            } catch (Exception e) {
+                eb.setDescription("\n**" + clock.text() + "**" +
+                        "\nTimezone: " + timezone.text().replaceAll("\\P{InBasic_Latin}", " "));
+            }
 
         } catch (
                 Exception e) {

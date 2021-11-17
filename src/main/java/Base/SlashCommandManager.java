@@ -1,5 +1,8 @@
 package Base;
 
+import Commands.Currency.AddToShopCommand;
+import Commands.Currency.GetBalanceCommand;
+import Commands.Currency.ListShopCommand;
 import Commands.InviteCommand;
 import Commands.PingCommand;
 import Commands.SourceCommand;
@@ -21,6 +24,7 @@ public class SlashCommandManager {
 
     public SlashCommandManager(JDA jda, Long guildID) {
         slashCommands = new ArrayList<>();
+
         slashCommands.add(new PingCommand());
         slashCommands.add(new InviteCommand());
         slashCommands.add(new SourceCommand());
@@ -30,11 +34,15 @@ public class SlashCommandManager {
         slashCommands.add(new ColorDecodeCommand());
         slashCommands.add(new ImageCaptionCommand());
         slashCommands.add(new TimeConversionCommand());
+        slashCommands.add(new GetBalanceCommand());
+        slashCommands.add(new ListShopCommand());
+        slashCommands.add(new AddToShopCommand());
 
         registerSlashCommands(jda, guildID);
     }
 
     private void registerSlashCommands(JDA jda, Long guildID) {
+
         if (guildID != null) {
             for (SlashCommand command : getSlashCommands()) {
                 if (command.getCommandArgs() == null) {

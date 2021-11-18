@@ -49,6 +49,7 @@ public class AddToShopCommand extends SlashCommand {
                 return;
             }
 
+
             if (event.getOption("price").getAsDouble() < 1) {
                 eb.setTitle("Invalid Price");
                 eb.setColor(Color.decode("#c0392b"));

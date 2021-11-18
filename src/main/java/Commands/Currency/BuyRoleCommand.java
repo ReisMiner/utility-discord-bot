@@ -80,7 +80,7 @@ public class BuyRoleCommand extends SlashCommand {
         DatabaseUtil.changeBalance(event.getUser(), event.getGuild().getIdLong(), price*-1);
         event.getGuild().addRoleToMember(event.getMember(), role).queue();
 
-        eb.setDescription("Successfully bought " + role.getAsMention());
+        eb.setDescription("\uD83D\uDED2 Successfully bought " + role.getAsMention());
         event.getHook().editOriginalEmbeds(eb.build()).queue();
     }
 }

@@ -37,6 +37,10 @@ public class SlashCommandManager {
         slashCommands.add(new AddToShopCommand());
         slashCommands.add(new RemoveFromShopCommand());
         slashCommands.add(new BuyRoleCommand());
+        slashCommands.add(new ChangeCoinFormulaCommand());
+        slashCommands.add(new GiftCoinsCommand());
+        slashCommands.add(new AddCoinsCommand());
+        slashCommands.add(new RemoveCoinsCommand());
 
         registerSlashCommands(jda, guildID);
     }

@@ -26,7 +26,7 @@ public class ListShopCommand extends SlashCommand {
         event.deferReply().queue();
         EmbedBuilder eb = new EmbedBuilder();
         eb.setColor(Color.decode("#27ae60"));
-        eb.setTitle("Shop Items");
+        eb.setTitle("\uD83D\uDED2 Shop Items");
         eb.setFooter("Query performed by " + event.getMember().getUser().getAsTag());
 
         ArrayList<String> prices = new ArrayList<>();

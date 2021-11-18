@@ -1,4 +1,4 @@
-create table t_servers
+create table servers
 (
     server_id    varchar(20) primary key not null,
     server_name  text,
@@ -6,7 +6,7 @@ create table t_servers
     coin_formula text default '1'
 );
 
-create table t_shop_items
+create table shop_items
 (
     item_id     int auto_increment primary key,
     server_id   varchar(20) not null,
@@ -16,7 +16,7 @@ create table t_shop_items
     foreign key (server_id) references t_servers (server_id)
 );
 
-create table t_user_coins
+create table user_coins
 (
     user_id     varchar(20) not null,
     server_id   varchar(20) not null,

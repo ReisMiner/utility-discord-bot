@@ -74,7 +74,8 @@ public class Bot extends ListenerAdapter {
         if (event.getAuthor().isBot()) return;
         if (!DatabaseUtil.userExists(event.getAuthor(), event.getGuild().getIdLong()))
             DatabaseUtil.addNewUser(event.getAuthor(), event.getGuild().getIdLong());
-        DatabaseUtil.increaseCurrency(event.getAuthor(), event.getGuild().getIdLong());
+        int amount = DatabaseUtil.getCoinFormula(event.getGuild().getIdLong());
+        DatabaseUtil.changeBalance(event.getAuthor(), event.getGuild().getIdLong(), amount);
     }
 
     @Override

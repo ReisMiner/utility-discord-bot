@@ -10,24 +10,35 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class DatabaseUtil {
-    public static void increaseCurrency(User user, Long guildID) {
-        int addition;
+    public static void changeBalance(User user, Long guildID, int amount) {
+
         try (Connection connection = DriverManager.getConnection(Bot.DB_HOST, Bot.DB_USER, Bot.DB_PW)) {
             Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery("select * from t_servers where server_id like " + guildID);
 
-            if (resultSet.next()) {
-                addition = resultSet.getInt(4);
-            } else {
-                throw new SQLException();
-            }
-            String s = String.format("UPDATE t_user_coins set coin_amount=coin_amount+%d where `server_id` like '%d' and user_id like '%d'", addition, guildID, user.getIdLong());
+            String s = String.format("UPDATE t_user_coins set coin_amount=coin_amount+%d where `server_id` like '%d' and user_id like '%d'", amount, guildID, user.getIdLong());
 
             statement.executeUpdate(s);
 
         } catch (SQLException e) {
             System.err.println("Increase Currency Error:\n" + e);
         }
+    }
+
+    public static int getCoinFormula(Long guildID) {
+        int addition = 0;
+        try (Connection connection = DriverManager.getConnection(Bot.DB_HOST, Bot.DB_USER, Bot.DB_PW)) {
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery("select * from t_servers where server_id like " + guildID);
+            if (resultSet.next()) {
+                addition = resultSet.getInt(4);
+            } else {
+                throw new SQLException();
+            }
+
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return addition;
     }
 
     public static boolean userExists(User user, Long guildID) {
@@ -122,8 +133,21 @@ public class DatabaseUtil {
             ResultSet resultSet = statement.executeQuery(s);
             return resultSet.next();
         } catch (SQLException e) {
-            System.err.println("Shop Item Create Error:\n" + e);
+            System.err.println("Shop Item Check Error:\n" + e);
             return true;
+        }
+    }
+
+    public static int getPriceOfShopItem(Long guildID, Long roleID) {
+        try (Connection connection = DriverManager.getConnection(Bot.DB_HOST, Bot.DB_USER, Bot.DB_PW)) {
+            Statement statement = connection.createStatement();
+            String s = String.format("select * from t_shop_items where server_id like '%d' and role like '%d'", guildID, roleID);
+            ResultSet resultSet = statement.executeQuery(s);
+            resultSet.next();
+            return resultSet.getInt(5);
+        } catch (SQLException e) {
+            System.err.println("Shop Item Check Error:\n" + e);
+            return -1;
         }
     }
 
@@ -146,7 +170,6 @@ public class DatabaseUtil {
             ResultSet resultSet = statement.executeQuery(String.format("select * from t_shop_items where server_id like %d", guildID));
             Map<String, String> servers = new HashMap<>();
             while (resultSet.next()) {
-                System.out.println(resultSet.getInt(5));
                 servers.put(resultSet.getLong(3) + "_" + resultSet.getInt(5), resultSet.getString(4));
             }
             return servers;

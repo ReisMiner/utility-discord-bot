@@ -1,8 +1,6 @@
 package Base;
 
-import Commands.Currency.AddToShopCommand;
-import Commands.Currency.GetBalanceCommand;
-import Commands.Currency.ListShopCommand;
+import Commands.Currency.*;
 import Commands.InviteCommand;
 import Commands.PingCommand;
 import Commands.SourceCommand;
@@ -37,6 +35,8 @@ public class SlashCommandManager {
         slashCommands.add(new GetBalanceCommand());
         slashCommands.add(new ListShopCommand());
         slashCommands.add(new AddToShopCommand());
+        slashCommands.add(new RemoveFromShopCommand());
+        slashCommands.add(new BuyRoleCommand());
 
         registerSlashCommands(jda, guildID);
     }

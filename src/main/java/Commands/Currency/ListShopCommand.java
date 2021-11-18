@@ -42,7 +42,7 @@ public class ListShopCommand extends SlashCommand {
             description.add(v);
         });
 
-        if (prices.get(0) != null) {
+        if (!prices.isEmpty()) {
             StringBuilder out = new StringBuilder();
             for (int i = 0; i < prices.size(); i++) {
                 out.append("\n<@&").append(roleID.get(i)).append("> - **").append(prices.get(i)).append(" Coins**\n").append(description.get(i)).append("\n");

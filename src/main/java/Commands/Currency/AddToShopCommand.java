@@ -4,6 +4,7 @@ import Base.SlashCommand;
 import Base.SlashCommandArgs;
 import Base.Util.DatabaseUtil;
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 
@@ -32,29 +33,55 @@ public class AddToShopCommand extends SlashCommand {
 
     @Override
     public void onExecute(SlashCommandEvent event) {
-        event.deferReply().queue();
+        event.deferReply().setEphemeral(true).queue();
         EmbedBuilder eb = new EmbedBuilder();
         eb.setColor(Color.decode("#27ae60"));
         eb.setTitle("New Role added to the shop!");
         eb.setFooter("Query performed by " + event.getMember().getUser().getAsTag());
 
-        if (DatabaseUtil.checkShopItem(event.getGuild().getIdLong(), event.getOption("role").getAsRole().getIdLong())) {
-            eb.setTitle("Role already exists in shop!");
-            eb.setColor(Color.decode("#c0392b"));
-            eb.setDescription("<a:alertsign:864083960886853683> Did not add the role!");
-            event.getHook().editOriginalEmbeds(eb.build()).queue();
-            return;
-        }
+        if (event.getMember().hasPermission(Permission.MANAGE_PERMISSIONS) && event.getMember().hasPermission(Permission.MANAGE_ROLES)) {
 
-        if (DatabaseUtil.addNewShopItem(event.getGuild().getIdLong(),
-                event.getOption("role").getAsRole(),
-                event.getOption("description").getAsString(),
-                event.getOption("price").getAsString())) {
-            eb.setDescription("Operation Successful!");
+            if (event.getOption("role").getAsRole() == event.getGuild().getPublicRole()) {
+                eb.setTitle("Cant add @everyone");
+                eb.setColor(Color.decode("#c0392b"));
+                eb.setDescription("<a:alertsign:864083960886853683> Cannot add the @everyone role to the shop!");
+                event.getHook().editOriginalEmbeds(eb.build()).queue();
+                return;
+            }
+
+            if (event.getOption("price").getAsDouble() < 1) {
+                eb.setTitle("Invalid Price");
+                eb.setColor(Color.decode("#c0392b"));
+                eb.setDescription("<a:alertsign:864083960886853683> Give the Role a price higher than 0 Coins!");
+                event.getHook().editOriginalEmbeds(eb.build()).queue();
+                return;
+            }
+
+            if (DatabaseUtil.checkShopItem(event.getGuild().getIdLong(), event.getOption("role").getAsRole().getIdLong())) {
+                eb.setTitle("Role already exists in shop!");
+                eb.setColor(Color.decode("#c0392b"));
+                eb.setDescription("<a:alertsign:864083960886853683> Did not add the role!");
+                event.getHook().editOriginalEmbeds(eb.build()).queue();
+                return;
+            }
+
+            if (DatabaseUtil.addNewShopItem(event.getGuild().getIdLong(),
+                    event.getOption("role").getAsRole(),
+                    event.getOption("description").getAsString(),
+                    event.getOption("price").getAsString())) {
+                eb.setDescription("Operation Successful!");
+            } else {
+                eb.setColor(Color.decode("#c0392b"));
+                eb.setDescription("<a:alertsign:864083960886853683> An unknown error occurred!");
+            }
+            event.getHook().editOriginalEmbeds(eb.build()).queue();
+
         } else {
+            // NO PERMS
+            eb.setTitle("No Permissions");
             eb.setColor(Color.decode("#c0392b"));
-            eb.setDescription("<a:alertsign:864083960886853683> An unknown error occurred!");
+            eb.setDescription("<a:alertsign:864083960886853683> You have no permissions to do this!");
+            event.getHook().editOriginalEmbeds(eb.build()).queue();
         }
-        event.getHook().editOriginalEmbeds(eb.build()).queue();
     }
 }

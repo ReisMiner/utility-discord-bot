@@ -18,7 +18,7 @@ public class TimeConversionCommand extends SlashCommand {
 
     @Override
     public String getDescription() {
-        return "Convert countries";
+        return "Get the current time from a location/timezone";
     }
 
     @Override

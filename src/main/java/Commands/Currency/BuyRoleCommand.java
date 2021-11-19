@@ -15,7 +15,7 @@ import java.util.ArrayList;
 public class BuyRoleCommand extends SlashCommand {
     @Override
     public String getDescription() {
-        return "Add a new Role to the shop.";
+        return "Buy a role from the shop";
     }
 
     @Override
@@ -26,7 +26,7 @@ public class BuyRoleCommand extends SlashCommand {
     @Override
     public ArrayList<SlashCommandArgs> getCommandArgs() {
         ArrayList<SlashCommandArgs> args = new ArrayList<>();
-        args.add(new SlashCommandArgs(OptionType.ROLE, "role", "The role users should be able to buy", true));
+        args.add(new SlashCommandArgs(OptionType.ROLE, "role", "The role you wanna buy", true));
         return args;
     }
 
@@ -67,7 +67,7 @@ public class BuyRoleCommand extends SlashCommand {
             return;
         }
 
-        int price = DatabaseUtil.getPriceOfShopItem(event.getGuild().getIdLong(), role.getIdLong());
+        long price = DatabaseUtil.getPriceOfShopItem(event.getGuild().getIdLong(), role.getIdLong());
 
         if (price < 0) {
             eb.setColor(Color.decode("#27ae60"));
@@ -77,7 +77,8 @@ public class BuyRoleCommand extends SlashCommand {
             return;
         }
 
-        DatabaseUtil.changeBalance(event.getUser(), event.getGuild().getIdLong(), price*-1);
+        DatabaseUtil.changeBalance(event.getUser(), event.getGuild().getIdLong(), price * -1L);
+        DatabaseUtil.changeBankBalance(event.getGuild().getIdLong(), price);
         event.getGuild().addRoleToMember(event.getMember(), role).queue();
 
         eb.setDescription("\uD83D\uDED2 Successfully bought " + role.getAsMention());

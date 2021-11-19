@@ -3,7 +3,8 @@ create table servers
     server_id    varchar(20) primary key not null,
     server_name  text,
     date_joined  datetime,
-    coin_formula text default '1'
+    coin_formula text default '1',
+    bank_balance bigint(19) default '0'
 );
 
 create table shop_items
@@ -12,15 +13,15 @@ create table shop_items
     server_id   varchar(20) not null,
     role        text,
     description text,
-    price int,
-    foreign key (server_id) references t_servers (server_id)
+    price bigint(19),
+    foreign key (server_id) references servers (server_id)
 );
 
 create table user_coins
 (
     user_id     varchar(20) not null,
     server_id   varchar(20) not null,
-    coin_amount long default 0,
+    coin_amount bigint(19) default 0,
     CONSTRAINT user_coins_id PRIMARY KEY (user_id, server_id),
-    FOREIGN KEY (server_id) references t_servers(server_id)
+    FOREIGN KEY (server_id) references servers(server_id)
 );

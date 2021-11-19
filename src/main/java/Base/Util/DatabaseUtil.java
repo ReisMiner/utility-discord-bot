@@ -8,6 +8,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.TreeMap;
 
 public class DatabaseUtil {
 
@@ -15,7 +16,7 @@ public class DatabaseUtil {
     private static final String coinsTable = "user_coins";
     private static final String shopTable = "shop_items";
 
-    public static boolean changeBalance(User user, Long guildID, int amount) {
+    public static boolean changeBalance(User user, Long guildID, long amount) {
 
         try (Connection connection = DriverManager.getConnection(Bot.DB_HOST, Bot.DB_USER, Bot.DB_PW)) {
             Statement statement = connection.createStatement();
@@ -26,17 +27,44 @@ public class DatabaseUtil {
             return true;
         } catch (SQLException e) {
             System.err.println("Increase Currency Error:\n" + e);
-            return true;
+            return false;
         }
     }
 
-    public static int getCoinFormula(Long guildID) {
-        int addition = 0;
+    public static boolean changeBankBalance(Long guildID, long amount) {
+        try (Connection connection = DriverManager.getConnection(Bot.DB_HOST, Bot.DB_USER, Bot.DB_PW)) {
+            Statement statement = connection.createStatement();
+
+            String s = String.format("UPDATE %s set bank_balance=bank_balance+%d where `server_id` like '%d'", serverTable, amount, guildID);
+
+            statement.executeUpdate(s);
+            return true;
+        } catch (SQLException e) {
+            System.err.println("Change bank bal Error:\n" + e);
+            return false;
+        }
+
+    }
+
+    public static long bankBalance(Long guildID) {
+        try (Connection connection = DriverManager.getConnection(Bot.DB_HOST, Bot.DB_USER, Bot.DB_PW)) {
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(String.format("select * from %s where server_id like '%d'", serverTable, guildID));
+            resultSet.next();
+            return resultSet.getLong(5);
+        } catch (SQLException e) {
+            System.err.println("Check bank bal Error:\n" + e);
+            return -1;
+        }
+    }
+
+    public static long getCoinFormula(Long guildID) {
+        long addition = 0;
         try (Connection connection = DriverManager.getConnection(Bot.DB_HOST, Bot.DB_USER, Bot.DB_PW)) {
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery("select * from " + serverTable + " where server_id like " + guildID);
             if (resultSet.next()) {
-                addition = resultSet.getInt(4);
+                addition = resultSet.getLong(4);
             } else {
                 throw new SQLException();
             }
@@ -47,7 +75,7 @@ public class DatabaseUtil {
         return addition;
     }
 
-    public static boolean changeCoinFormula(Long guildID, int formula) {
+    public static boolean changeCoinFormula(Long guildID, long formula) {
         try (Connection connection = DriverManager.getConnection(Bot.DB_HOST, Bot.DB_USER, Bot.DB_PW)) {
             Statement statement = connection.createStatement();
 
@@ -72,12 +100,12 @@ public class DatabaseUtil {
         }
     }
 
-    public static int userBalance(User user, Long guildID) {
+    public static long userBalance(User user, Long guildID) {
         try (Connection connection = DriverManager.getConnection(Bot.DB_HOST, Bot.DB_USER, Bot.DB_PW)) {
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery(String.format("select * from %s where user_id like '%d' and server_id like '%d'", coinsTable, user.getIdLong(), guildID));
             resultSet.next();
-            return resultSet.getInt(3);
+            return resultSet.getLong(3);
         } catch (SQLException e) {
             System.err.println("Check user bal Error:\n" + e);
             return -1;
@@ -89,7 +117,7 @@ public class DatabaseUtil {
             Statement statement = connection.createStatement();
             String s = String.format("INSERT INTO %s (user_id, server_id, coin_amount) values ( '%d', '%s', '%d')", coinsTable, user.getIdLong(), guildID, 0);
             statement.executeUpdate(s);
-            System.out.println("Created new user in DB: " + user.getName());
+            System.out.println("Created new user in DB: " + user.getName() + " Server: " + guildID);
         } catch (SQLException e) {
             System.err.println("Add User Error:\n" + e);
         }
@@ -98,11 +126,27 @@ public class DatabaseUtil {
     public static boolean serverExists(Long guildID) {
         try (Connection connection = DriverManager.getConnection(Bot.DB_HOST, Bot.DB_USER, Bot.DB_PW)) {
             Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery(String.format("select * from %s where server_id like %d ", serverTable, guildID));
+            ResultSet resultSet = statement.executeQuery(String.format("select * from %s where server_id like '%d' ", serverTable, guildID));
             return resultSet.next();
         } catch (SQLException e) {
             System.err.println("Check server Error:\n" + e);
             return true;
+        }
+    }
+
+    public static Map<Long, Long> getLeaderboard(long guildID) {
+        try (Connection connection = DriverManager.getConnection(Bot.DB_HOST, Bot.DB_USER, Bot.DB_PW)) {
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery("select * from " + coinsTable + " where server_id like '" + guildID + "' order by coin_amount desc");
+            Map<Long, Long> person = new TreeMap<>();
+            while (resultSet.next()) {
+                System.out.println("Coins: " + resultSet.getLong(3));
+                person.put(resultSet.getLong(1), resultSet.getLong(3));
+            }
+            return person;
+        } catch (SQLException e) {
+            System.err.println("Check server Error:\n" + e);
+            return null;
         }
     }
 
@@ -134,7 +178,7 @@ public class DatabaseUtil {
 
     public static boolean addNewShopItem(Long guildID, Role role, String description, String price) {
         try (Connection connection = DriverManager.getConnection(Bot.DB_HOST, Bot.DB_USER, Bot.DB_PW)) {
-            int intPrice = Integer.parseInt(price);
+            long intPrice = Long.parseLong(price);
             Statement statement = connection.createStatement();
             String s = String.format("INSERT INTO %s (server_id, role, description, price) values ( '%d', '%d', '%s', '%d')", serverTable, guildID, role.getIdLong(), description, intPrice);
             statement.executeUpdate(s);
@@ -158,13 +202,13 @@ public class DatabaseUtil {
         }
     }
 
-    public static int getPriceOfShopItem(Long guildID, Long roleID) {
+    public static long getPriceOfShopItem(Long guildID, Long roleID) {
         try (Connection connection = DriverManager.getConnection(Bot.DB_HOST, Bot.DB_USER, Bot.DB_PW)) {
             Statement statement = connection.createStatement();
             String s = String.format("select * from %s where server_id like '%d' and role like '%d'", shopTable, guildID, roleID);
             ResultSet resultSet = statement.executeQuery(s);
             resultSet.next();
-            return resultSet.getInt(5);
+            return resultSet.getLong(5);
         } catch (SQLException e) {
             System.err.println("Shop Item Check Error:\n" + e);
             return -1;
@@ -187,10 +231,10 @@ public class DatabaseUtil {
     public static Map<String, String> getAllShopItemsFromGuild(long guildID) {
         try (Connection connection = DriverManager.getConnection(Bot.DB_HOST, Bot.DB_USER, Bot.DB_PW)) {
             Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery(String.format("select * from %s where server_id like %d", shopTable, guildID));
+            ResultSet resultSet = statement.executeQuery(String.format("select * from %s where server_id like '%d'", shopTable, guildID));
             Map<String, String> servers = new HashMap<>();
             while (resultSet.next()) {
-                servers.put(resultSet.getLong(3) + "_" + resultSet.getInt(5), resultSet.getString(4));
+                servers.put(resultSet.getLong(3) + "_" + resultSet.getLong(5), resultSet.getString(4));
             }
             return servers;
         } catch (SQLException e) {

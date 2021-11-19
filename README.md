@@ -14,7 +14,8 @@ Make a pull Request!
 
 - Clone the repo with intellij
 - let it build the gradle stuff and maybe you gotta reload gradle
-- add a Secrets.xml file with 3 tags TOKEN, CC_EMAIL and CC_PW in the root dir of the project
+- add a secrets.xml file with 5 tags TOKEN, DB_DB and DB_HOST, DB_USER, DB_PW in the root dir of the project
+- make the db with the script in ./SQL
 - code
 - go to Base.Bot and at onReady() where the slashCommandManager is replace null with ur guildID 
 - build it with the shadowjar task

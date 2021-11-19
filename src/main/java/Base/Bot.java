@@ -39,7 +39,7 @@ public class Bot extends ListenerAdapter {
         registerSecrets();
         jda = JDABuilder.create(Bot.TOKEN, GatewayIntent.GUILD_MESSAGES, GatewayIntent.DIRECT_MESSAGES, GatewayIntent.GUILD_VOICE_STATES)
                 .addEventListeners(new Bot())
-                .setChunkingFilter(ChunkingFilter.ALL) // enable member chunking for all guilds
+                .setChunkingFilter(ChunkingFilter.ALL)// enable member chunking for all guilds
                 .build();
     }
 
@@ -74,7 +74,7 @@ public class Bot extends ListenerAdapter {
         if (event.getAuthor().isBot()) return;
         if (!DatabaseUtil.userExists(event.getAuthor(), event.getGuild().getIdLong()))
             DatabaseUtil.addNewUser(event.getAuthor(), event.getGuild().getIdLong());
-        int amount = DatabaseUtil.getCoinFormula(event.getGuild().getIdLong());
+        long amount = DatabaseUtil.getCoinFormula(event.getGuild().getIdLong());
         DatabaseUtil.changeBalance(event.getAuthor(), event.getGuild().getIdLong(), amount);
     }
 

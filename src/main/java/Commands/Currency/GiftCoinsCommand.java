@@ -33,7 +33,7 @@ public class GiftCoinsCommand extends SlashCommand {
     @Override
     public void onExecute(SlashCommandEvent event) {
         event.deferReply().queue();
-        int amount = Integer.parseInt(event.getOption("amount").getAsString());
+        long amount = Long.parseLong(event.getOption("amount").getAsString());
         Member recipient = event.getOption("recipient").getAsMember();
         EmbedBuilder eb = new EmbedBuilder();
         eb.setColor(Color.decode("#27ae60"));
@@ -64,7 +64,7 @@ public class GiftCoinsCommand extends SlashCommand {
             return;
         }
 
-        int bal = DatabaseUtil.userBalance(event.getUser(), event.getGuild().getIdLong());
+        long bal = DatabaseUtil.userBalance(event.getUser(), event.getGuild().getIdLong());
 
         if (bal < amount) {
             eb.setColor(Color.decode("#27ae60"));

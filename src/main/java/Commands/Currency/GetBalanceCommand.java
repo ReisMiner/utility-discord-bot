@@ -46,7 +46,7 @@ public class GetBalanceCommand extends SlashCommand {
         eb.setFooter("Query performed by " + event.getMember().getUser().getAsTag());
 
         if (DatabaseUtil.userExists(user, event.getGuild().getIdLong())) {
-            int bal = DatabaseUtil.userBalance(user, event.getGuild().getIdLong());
+            long bal = DatabaseUtil.userBalance(user, event.getGuild().getIdLong());
             if (bal >= 0)
                 eb.setDescription("\uD83D\uDCB8 **Balance: **" + bal+"\n\nGet more coins by being active in the sever!");
             else {

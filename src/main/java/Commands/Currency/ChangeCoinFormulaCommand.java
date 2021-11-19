@@ -19,7 +19,7 @@ public class ChangeCoinFormulaCommand extends SlashCommand {
 
     @Override
     public String getCommand() {
-        return "change-coin-earning";
+        return "coin-earning-amount";
     }
 
     @Override
@@ -32,7 +32,7 @@ public class ChangeCoinFormulaCommand extends SlashCommand {
     @Override
     public void onExecute(SlashCommandEvent event) {
         event.deferReply().queue();
-        int amount = Integer.parseInt(event.getOption("amount").getAsString());
+        long amount = Long.parseLong(event.getOption("amount").getAsString());
         EmbedBuilder eb = new EmbedBuilder();
         eb.setColor(Color.decode("#27ae60"));
         eb.setTitle("Changed earning Amount");
@@ -40,10 +40,10 @@ public class ChangeCoinFormulaCommand extends SlashCommand {
 
 
         if (event.getMember().hasPermission(Permission.MANAGE_PERMISSIONS) && event.getMember().hasPermission(Permission.MANAGE_PERMISSIONS)) {
-            if (amount < 0) {
+            if (amount < 0 || amount > 10000) {
                 eb.setColor(Color.decode("#27ae60"));
-                eb.setTitle("Earning too low");
-                eb.setDescription("<a:alertsign:864083960886853683> Cannot set earning under 0 Coins!");
+                eb.setTitle("Earning not in range");
+                eb.setDescription("<a:alertsign:864083960886853683> Earnings must be between 0 and 10000");
                 event.getHook().editOriginalEmbeds(eb.build()).queue();
                 return;
             }

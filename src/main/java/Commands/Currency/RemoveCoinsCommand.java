@@ -26,15 +26,15 @@ public class RemoveCoinsCommand extends SlashCommand {
     @Override
     public ArrayList<SlashCommandArgs> getCommandArgs() {
         ArrayList<SlashCommandArgs> args = new ArrayList<>();
-        args.add(new SlashCommandArgs(OptionType.INTEGER, "amount", "Amount of coins you wanna add", true));
-        args.add(new SlashCommandArgs(OptionType.USER, "recipient", "To whom you wanna add coins", true));
+        args.add(new SlashCommandArgs(OptionType.INTEGER, "amount", "Amount of coins you wanna remove", true));
+        args.add(new SlashCommandArgs(OptionType.USER, "recipient", "From whom you wanna remove coins", true));
         return args;
     }
 
     @Override
     public void onExecute(SlashCommandEvent event) {
         event.deferReply().queue();
-        int amount = Integer.parseInt(event.getOption("amount").getAsString());
+        long amount = Long.parseLong(event.getOption("amount").getAsString());
         Member recipient = event.getOption("recipient").getAsMember();
         EmbedBuilder eb = new EmbedBuilder();
         eb.setColor(Color.decode("#27ae60"));
@@ -67,7 +67,7 @@ public class RemoveCoinsCommand extends SlashCommand {
                 return;
             }
 
-            int bal = DatabaseUtil.userBalance(recipient.getUser(), event.getGuild().getIdLong());
+            long bal = DatabaseUtil.userBalance(recipient.getUser(), event.getGuild().getIdLong());
 
             if (bal - amount < 0) {
                 eb.setTitle("Not enough Balance");

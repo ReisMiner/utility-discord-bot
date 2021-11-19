@@ -13,12 +13,12 @@ import java.util.Map;
 public class ListShopCommand extends SlashCommand {
     @Override
     public String getDescription() {
-        return "Add a new Role to the shop.";
+        return "Get items from the shop";
     }
 
     @Override
     public String getCommand() {
-        return "shop-list";
+        return "shop";
     }
 
     @Override

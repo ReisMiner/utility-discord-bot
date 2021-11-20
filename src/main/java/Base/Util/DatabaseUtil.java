@@ -180,7 +180,7 @@ public class DatabaseUtil {
         try (Connection connection = DriverManager.getConnection(Bot.DB_HOST, Bot.DB_USER, Bot.DB_PW)) {
             long intPrice = Long.parseLong(price);
             Statement statement = connection.createStatement();
-            String s = String.format("INSERT INTO %s (server_id, role, description, price) values ( '%d', '%d', '%s', '%d')", serverTable, guildID, role.getIdLong(), description, intPrice);
+            String s = String.format("INSERT INTO %s (server_id, role, description, price) values ( '%d', '%d', '%s', '%d')", shopTable, guildID, role.getIdLong(), description, intPrice);
             statement.executeUpdate(s);
             System.out.println("Created new shop item for " + guildID);
             return true;

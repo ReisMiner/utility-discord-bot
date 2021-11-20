@@ -6,8 +6,6 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 
 import java.awt.*;
-import java.util.Arrays;
-import java.util.Comparator;
 import java.util.Map;
 
 public class ListShopCommand extends SlashCommand {
@@ -29,19 +27,19 @@ public class ListShopCommand extends SlashCommand {
         eb.setTitle("\uD83D\uDED2 Shop Items");
         eb.setFooter("Query performed by " + event.getMember().getUser().getAsTag());
 
-        Map<String, String> items = DatabaseUtil.getAllShopItemsFromGuild(event.getGuild().getIdLong());
+        Map<String[], String> items = DatabaseUtil.getAllShopItemsFromGuild(event.getGuild().getIdLong());
 
         if (!items.isEmpty()) {
             StringBuilder out = new StringBuilder();
             items.entrySet().stream()
-                    .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
+                    .sorted(Map.Entry.comparingByValue())
                     .forEach((v) -> {
                         out.append("\n<@&");
-                        out.append(Arrays.stream(v.getKey().split("_")).toArray()[0].toString());
+                        out.append(v.getKey()[0]);
                         out.append("> - **");
-                        out.append(Arrays.stream(v.getKey().split("_")).toArray()[1].toString());
-                        out.append(" Coins**\n");
                         out.append(v.getValue());
+                        out.append(" Coins**\n");
+                        out.append(v.getKey()[1]);
                         out.append("\n");
                     });
             eb.setDescription(out.toString());

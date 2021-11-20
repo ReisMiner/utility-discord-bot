@@ -227,13 +227,13 @@ public class DatabaseUtil {
         }
     }
 
-    public static Map<String, String> getAllShopItemsFromGuild(long guildID) {
+    public static Map<String[], String> getAllShopItemsFromGuild(long guildID) {
         try (Connection connection = DriverManager.getConnection(Bot.DB_HOST, Bot.DB_USER, Bot.DB_PW)) {
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery(String.format("select * from %s where server_id like '%d'", shopTable, guildID));
-            Map<String, String> servers = new HashMap<>();
+            Map<String[], String> servers = new HashMap<>();
             while (resultSet.next()) {
-                servers.put(resultSet.getLong(3) + "_" + resultSet.getLong(5), resultSet.getString(4));
+                servers.put(new String[]{String.valueOf(resultSet.getLong(3)), resultSet.getString(4)}, resultSet.getString(5));
             }
             return servers;
         } catch (SQLException e) {

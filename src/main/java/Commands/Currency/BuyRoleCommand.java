@@ -82,6 +82,14 @@ public class BuyRoleCommand extends SlashCommand {
             return;
         }
 
+        if(DatabaseUtil.userBalance(event.getUser(),event.getGuild().getIdLong())<=price){
+            eb.setColor(Color.decode("#27ae60"));
+            eb.setTitle("Not enough money");
+            eb.setDescription("<a:alertsign:864083960886853683> You dont have sufficient funds!");
+            event.getHook().editOriginalEmbeds(eb.build()).queue();
+            return;
+        }
+
         DatabaseUtil.changeBalance(event.getUser(), event.getGuild().getIdLong(), price * -1L);
         DatabaseUtil.changeBankBalance(event.getGuild().getIdLong(), price);
         event.getGuild().addRoleToMember(event.getMember(), role).queue();

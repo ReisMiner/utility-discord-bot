@@ -39,10 +39,6 @@ public class LeaderboardCommand extends SlashCommand {
             return;
         }
 
-        persons.forEach((k, v) -> {
-            System.out.println("Key: " + k + " Value: " + v);
-        });
-
         ArrayList<Long> ids = new ArrayList<>();
         ArrayList<Long> coins = new ArrayList<>();
 

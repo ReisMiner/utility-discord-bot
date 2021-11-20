@@ -140,7 +140,6 @@ public class DatabaseUtil {
             ResultSet resultSet = statement.executeQuery("select * from " + coinsTable + " where server_id like '" + guildID + "' order by coin_amount desc");
             Map<Long, Long> person = new TreeMap<>();
             while (resultSet.next()) {
-                System.out.println("Coins: " + resultSet.getLong(3));
                 person.put(resultSet.getLong(1), resultSet.getLong(3));
             }
             return person;

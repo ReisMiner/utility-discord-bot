@@ -28,7 +28,7 @@ public class ListShopCommand extends SlashCommand {
         eb.setTitle("\uD83D\uDED2 Shop Items");
         eb.setFooter("Query performed by " + event.getMember().getUser().getAsTag());
 
-        Map<String[], String> items = DatabaseUtil.getAllShopItemsFromGuild(event.getGuild().getIdLong());
+        Map<String[], Long> items = DatabaseUtil.getAllShopItemsFromGuild(event.getGuild().getIdLong());
 
         if (!items.isEmpty()) {
             StringBuilder out = new StringBuilder();
@@ -38,7 +38,7 @@ public class ListShopCommand extends SlashCommand {
                         out.append("\n<@&");
                         out.append(v.getKey()[0]);
                         out.append("> - **");
-                        out.append(v.getValue());
+                        out.append(v.getValue().toString());
                         out.append(" Coins**\n");
                         out.append(v.getKey()[1]);
                         out.append("\n");

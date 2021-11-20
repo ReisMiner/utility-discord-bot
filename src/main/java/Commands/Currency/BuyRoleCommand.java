@@ -48,15 +48,20 @@ public class BuyRoleCommand extends SlashCommand {
             return;
         }
 
+        boolean above = false;
         for (Role r : event.getGuild().getSelfMember().getRoles()) {
-            if (r.getPosition() < role.getPosition()) {
-                eb.setColor(Color.decode("#27ae60"));
-                eb.setTitle("Role Position Error");
-                eb.setDescription("<a:alertsign:864083960886853683> Bot is under the wanted role!\n" +
-                        "Move the bot Role above " + role.getAsMention());
-                event.getHook().editOriginalEmbeds(eb.build()).queue();
-                return;
+            if (r.getPosition() > role.getPosition()) {
+                above = true;
+                break;
             }
+        }
+        if (!above) {
+            eb.setColor(Color.decode("#27ae60"));
+            eb.setTitle("Role Position Error");
+            eb.setDescription("<a:alertsign:864083960886853683> Bot is under the wanted role!\n" +
+                    "Move the bot Role above " + role.getAsMention());
+            event.getHook().editOriginalEmbeds(eb.build()).queue();
+            return;
         }
 
         if (event.getMember().getRoles().contains(role)) {

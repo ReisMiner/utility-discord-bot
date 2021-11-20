@@ -6,6 +6,7 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 
 import java.awt.*;
+import java.util.Comparator;
 import java.util.Map;
 
 public class ListShopCommand extends SlashCommand {
@@ -32,7 +33,7 @@ public class ListShopCommand extends SlashCommand {
         if (!items.isEmpty()) {
             StringBuilder out = new StringBuilder();
             items.entrySet().stream()
-                    .sorted(Map.Entry.comparingByValue())
+                    .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
                     .forEach((v) -> {
                         out.append("\n<@&");
                         out.append(v.getKey()[0]);

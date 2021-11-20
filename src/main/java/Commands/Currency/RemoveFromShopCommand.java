@@ -15,7 +15,7 @@ import java.util.ArrayList;
 public class RemoveFromShopCommand extends SlashCommand {
     @Override
     public String getDescription() {
-        return "Remove a role from the shop";
+        return "Mod Command: Remove a role from the shop";
     }
 
     @Override

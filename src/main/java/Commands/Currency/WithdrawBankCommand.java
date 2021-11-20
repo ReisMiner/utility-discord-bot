@@ -15,7 +15,7 @@ public class WithdrawBankCommand extends SlashCommand {
 
     @Override
     public String getDescription() {
-        return "Transfer bank coins to a user";
+        return "Mod Command: Transfer bank coins to a user";
     }
 
     @Override

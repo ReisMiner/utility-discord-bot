@@ -14,7 +14,7 @@ import java.util.ArrayList;
 public class ChangeCoinFormulaCommand extends SlashCommand {
     @Override
     public String getDescription() {
-        return "Add a new Role to the shop.";
+        return "Mod Command: Change the amount of coins you get per message";
     }
 
     @Override

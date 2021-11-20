@@ -14,7 +14,7 @@ import java.util.ArrayList;
 public class AddToShopCommand extends SlashCommand {
     @Override
     public String getDescription() {
-        return "Add a new Role to the shop.";
+        return "Mod Command: Add a new Role to the shop.";
     }
 
     @Override

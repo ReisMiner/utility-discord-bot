@@ -40,7 +40,7 @@ public class GiftCoinsCommand extends SlashCommand {
         eb.setTitle("Gifted Coins");
         eb.setFooter("Query performed by " + event.getMember().getUser().getAsTag());
 
-        if (recipient.getUser() == event.getUser()) {
+        if (recipient.getUser().getIdLong() == event.getUser().getIdLong()) {
             eb.setColor(Color.decode("#27ae60"));
             eb.setTitle("Cannot send to yourself");
             eb.setDescription("<a:alertsign:864083960886853683> Cannot send coins to yourself!");

@@ -11,6 +11,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -85,7 +86,7 @@ public class ImageCaptionCommand extends SlashCommand {
             event.getHook().editOriginalEmbeds(eb.build()).queue();
     }
 
-    public void addCaption(String caption, String url, String filetype) throws IOException, URISyntaxException {
+    public void addCaption(String caption, String url, String filetype) throws IOException, URISyntaxException, FontFormatException {
         BufferedImage image = ImageIO.read(new URL(url));
         BufferedImage finalImage = makeImage(image, caption);
         File output = new File("img." + filetype);
@@ -120,12 +121,13 @@ public class ImageCaptionCommand extends SlashCommand {
         return fileType;
     }
 
-    public BufferedImage makeImage(BufferedImage image, String caption) throws IOException, URISyntaxException {
-        BufferedImage whiteBG = ImageIO.read(getClass().getResourceAsStream("/wb.jpg"));
+    public BufferedImage makeImage(BufferedImage image, String caption) throws IOException, URISyntaxException, FontFormatException {
+        BufferedImage whiteBG = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/wb.jpg")));
         whiteBG = resizeImage(whiteBG, image.getWidth(), 100);
 
         Graphics2D gf = whiteBG.createGraphics();
-        Font f = new Font("Arial", Font.BOLD, 40);
+        File file = new File(Objects.requireNonNull(this.getClass().getResource("/impact.ttf")).getFile());
+        Font f = Font.createFont(Font.TRUETYPE_FONT, Objects.requireNonNull(file)).deriveFont((float) whiteBG.getWidth() / 10);
         gf.setFont(f);
         gf.setColor(new Color(0, 0, 0));
 
@@ -143,7 +145,7 @@ public class ImageCaptionCommand extends SlashCommand {
                     curY += gf.getFontMetrics().getHeight();
                 }
 
-                if (curY + gf.getFontMetrics().getHeight() >= whiteBG.getHeight()) {
+                if (curY + gf.getFontMetrics().getHeight() > whiteBG.getHeight()) {
                     whiteBG = resizeImage(whiteBG, whiteBG.getWidth(), whiteBG.getHeight() + gf.getFontMetrics().getHeight());
                 }
                 disp += word + " ";

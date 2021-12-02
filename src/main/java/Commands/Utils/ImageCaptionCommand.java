@@ -50,16 +50,15 @@ public class ImageCaptionCommand extends SlashCommand {
         String url = Objects.requireNonNull(event.getOption("url")).getAsString();
         String[] a;
         String[] validTypes = {"png", "jpg", "jpeg"};
-        String filetype = "";
+        String fileName = "";
 
         try {
             a = url.split("\\.");
-            filetype = validateFileType(a[a.length - 1], validTypes);
-
-            if (!Arrays.asList(validTypes).contains(filetype)) {
+            fileName = event.getUser().getIdLong() + "." + validateFileType(a[a.length - 1], validTypes);
+            if (!Arrays.asList(validTypes).contains(fileName.split("\\.")[1])) {
                 throw new Exception("Not Valid File Type!");
             }
-            addCaption(text, url, filetype);
+            addCaption(text, url, fileName);
         } catch (Exception e) {
             out = "<a:alertsign:864083960886853683> Couldn't Edit the Image!\nCheck If the filetype is valid (.png, .jpg, .jpeg)\nCheck if the url is correct.";
             eb.setDescription(out);
@@ -72,25 +71,36 @@ public class ImageCaptionCommand extends SlashCommand {
 
         if (!error)
             try {
-                eb.setImage("attachment://img."+filetype);
-                event.getHook().editOriginalEmbeds(eb.build()).addFile(new File("img." + filetype), "img." + filetype).queue();
+                eb.setImage("attachment://" + fileName);
+                event.getHook().editOriginalEmbeds(eb.build()).addFile(new File(fileName), fileName).queue();
             } catch (Exception e) {
                 out = "<a:alertsign:864083960886853683> Couldn't Edit the Image!\nCheck If the filetype is valid (.png, .jpg, .jpeg)";
                 eb.setDescription(out);
                 eb.setColor(Color.decode("#c0392b"));
-                error = true;
                 event.getHook().editOriginalEmbeds(eb.build()).queue();
                 e.printStackTrace();
             }
         else
             event.getHook().editOriginalEmbeds(eb.build()).queue();
+
+        //wait so we can delete the file and is not used anymore
+        try {
+            Thread.sleep(600);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        File f = new File(fileName);
+        if (f.exists()) {
+            System.out.println(f.delete());
+        }
     }
 
-    public void addCaption(String caption, String url, String filetype) throws IOException, URISyntaxException, FontFormatException {
+    public void addCaption(String caption, String url, String fileName) throws IOException, URISyntaxException, FontFormatException {
         BufferedImage image = ImageIO.read(new URL(url));
         BufferedImage finalImage = makeImage(image, caption);
-        File output = new File("img." + filetype);
-        ImageIO.write(finalImage, filetype.equals("jpg") ? "jpeg" : filetype, output);
+        File output = new File(fileName);
+        String fileType = fileName.split("\\.")[1];
+        ImageIO.write(finalImage, fileType.equals("jpg") ? "jpeg" : fileType, output);
     }
 
     public static BufferedImage resizeImage(BufferedImage img, int newW, int newH) { // source: stackoverflow (https://stackoverflow.com/a/9417836)
@@ -126,7 +136,7 @@ public class ImageCaptionCommand extends SlashCommand {
         whiteBG = resizeImage(whiteBG, image.getWidth(), 100);
 
         Graphics2D gf = whiteBG.createGraphics();
-        File file = new File(Objects.requireNonNull(this.getClass().getResource("/impact.ttf")).getFile());
+        InputStream file = getClass().getResourceAsStream("/impact.ttf");
         Font f = Font.createFont(Font.TRUETYPE_FONT, Objects.requireNonNull(file)).deriveFont((float) whiteBG.getWidth() / 10);
         gf.setFont(f);
         gf.setColor(new Color(0, 0, 0));

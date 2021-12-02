@@ -91,7 +91,7 @@ public class ImageCaptionCommand extends SlashCommand {
         }
         File f = new File(fileName);
         if (f.exists()) {
-            System.out.println(f.delete());
+            f.delete();
         }
     }
 

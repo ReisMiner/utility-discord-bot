@@ -134,7 +134,7 @@ public class DatabaseUtil {
             statement.setString(3, String.valueOf(0));
 
             statement.executeUpdate();
-            System.out.println("Created new user in DB: " + user.getName() + " Server: " + guildID);
+            System.out.println("Created new user in DB: " + user.getName() + ", " + user.getIdLong() + ". Server: " + guildID);
         } catch (SQLException e) {
             System.err.println("Add User Error:\n" + e);
         }

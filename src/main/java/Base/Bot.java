@@ -72,6 +72,11 @@ public class Bot extends ListenerAdapter {
     @Override
     public void onMessageReceived(@NotNull MessageReceivedEvent event) {
         if (event.getAuthor().isBot()) return;
+
+        //poop exclusion for poop server owner
+        if(event.getChannel().getIdLong() != 831635090911789130L) return;
+
+
         if (!DatabaseUtil.userExists(event.getAuthor(), event.getGuild().getIdLong()))
             DatabaseUtil.addNewUser(event.getAuthor(), event.getGuild().getIdLong());
         long amount = DatabaseUtil.getCoinFormula(event.getGuild().getIdLong());

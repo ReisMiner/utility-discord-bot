@@ -75,8 +75,8 @@ public class Bot extends ListenerAdapter {
         if (event.getAuthor().isBot()) return;
 
         //poop exclusion for poop server owner
-        if (event.getGuild().getIdLong() == 831635090407686165L)
-            if (event.getChannel().getIdLong() != 831635090911789130L) return;
+        //if (event.getGuild().getIdLong() == 831635090407686165L)
+        //    if (event.getChannel().getIdLong() != 831635090911789130L) return;
 
 
         if (!DatabaseUtil.userExists(event.getAuthor(), event.getGuild().getIdLong()))

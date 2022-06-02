@@ -48,6 +48,14 @@ public class WithdrawBankCommand extends SlashCommand {
             event.getHook().editOriginalEmbeds(eb.build()).queue();
             return;
         }
+        
+        if (!event.getMember().hasPermission(Permission.MANAGE_ROLES)) {
+            eb.setColor(Color.decode("#27ae60"));
+            eb.setTitle("No permissions!");
+            eb.setDescription("<a:alertsign:864083960886853683> You have no permissions to withdraw from the bank!");
+            event.getHook().editOriginalEmbeds(eb.build()).queue();
+            return;
+        }
 
         if (amount < 1) {
             eb.setColor(Color.decode("#27ae60"));

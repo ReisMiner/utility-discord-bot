@@ -4,6 +4,7 @@ import Base.SlashCommand;
 import Base.SlashCommandArgs;
 import Base.Util.DatabaseUtil;
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
@@ -45,6 +46,14 @@ public class WithdrawBankCommand extends SlashCommand {
             eb.setColor(Color.decode("#27ae60"));
             eb.setTitle("Cannot send to Bot");
             eb.setDescription("<a:alertsign:864083960886853683> Cannot send coins to Bots!");
+            event.getHook().editOriginalEmbeds(eb.build()).queue();
+            return;
+        }
+        
+        if (!event.getMember().hasPermission(Permission.MANAGE_ROLES)) {
+            eb.setColor(Color.decode("#27ae60"));
+            eb.setTitle("No permissions!");
+            eb.setDescription("<a:alertsign:864083960886853683> You have no permissions to withdraw from the bank!");
             event.getHook().editOriginalEmbeds(eb.build()).queue();
             return;
         }

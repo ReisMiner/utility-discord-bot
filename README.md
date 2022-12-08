@@ -22,6 +22,7 @@ Make a pull Request!
 - test the code
 - replace your guildID from step 5 with null
 - submit a pull request and dont publish ur secrets.xml
+- enjoy
 
 # contributors
 

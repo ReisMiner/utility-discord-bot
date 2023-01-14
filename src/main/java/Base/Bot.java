@@ -46,7 +46,7 @@ public class Bot extends ListenerAdapter {
     @Override
     public void onReady(@NotNull ReadyEvent event) {
         //TODO: CHANGE GUILD ID TO NULL FOR PUSH
-        slashCommandManager = new SlashCommandManager(jda, 684446613028077639L);
+        slashCommandManager = new SlashCommandManager(jda, null);
         jda.getPresence().setActivity(Activity.playing("Starting up..."));
 
         ArrayList<Long> dbServers = DatabaseUtil.getAllServers();

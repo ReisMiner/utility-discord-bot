@@ -44,6 +44,7 @@ public class SlashCommandManager {
         slashCommands.add(new BankBalanceCommand());
         slashCommands.add(new WithdrawBankCommand());
         slashCommands.add(new LeaderboardCommand());
+        slashCommands.add(new ReplaceTextCommand());
 
         registerSlashCommands(jda, guildID);
     }
